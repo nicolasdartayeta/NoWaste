@@ -1,0 +1,10 @@
+extends ../layout
+
+block content 
+    h1= title 
+    if restaurantesList.length 
+        ul 
+            each restaurante in restaurantesList
+                li #{restaurante.nombre}
+    else 
+        p No hay restaurantes
