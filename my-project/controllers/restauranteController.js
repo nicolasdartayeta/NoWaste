@@ -5,7 +5,7 @@ const restauranteModel = require('../models/restaurante');
 const { Model } = require("mongoose");
 const { title } = require("process");
 
-// Display list of all Restaurantes.
+// Display list of all restaurantes.
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
     const restaurantes = await restauranteModel.find().exec();
 
