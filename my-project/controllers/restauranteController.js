@@ -25,10 +25,12 @@ exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
       const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec();
       if (restauranteExists) {
         // Genre exists, redirect to its detail page.
-        res.send('EEROR al agregar restaurante');
+        res.send('ERROR al agregar restaurante');
       } else {
         await restaurante.save();
         // New genre saved. Redirect to genre detail page.
         res.redirect('/restaurantes');
       }
     });
+
+    //prueba
