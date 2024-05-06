@@ -1,0 +1,11 @@
+extends ../layout
+
+block content 
+    h1= nombre 
+
+    if datos.length != 0
+        ul 
+            each dato, atributo in datos
+                li #{atributo}: #{dato}
+    else 
+        p No hay datos

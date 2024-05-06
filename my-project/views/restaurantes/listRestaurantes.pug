@@ -5,6 +5,7 @@ block content
     if restaurantesList.length 
         ul 
             each restaurante in restaurantesList
-                li #{restaurante.nombre}
+                li 
+                    a(href='/restaurantes/show/' + restaurante.id) #{restaurante.nombre}
     else 
         p No hay restaurantes

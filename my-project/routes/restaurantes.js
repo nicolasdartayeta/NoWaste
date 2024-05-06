@@ -16,4 +16,7 @@ router.route('/add')
   router.route('/show')
   .get(restauranteController.restaurante_list)
 
+  router.route('/show/:restauranteId')
+  .get(restauranteController.restaurante_detail)
+
 module.exports = router;

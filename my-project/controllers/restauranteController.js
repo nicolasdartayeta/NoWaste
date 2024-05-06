@@ -20,7 +20,7 @@ exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
   // Handle Restaurante create on POST.
 exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
     // Create a genre object with escaped and trimmed data.
-    const restaurante = new restauranteModel({ nombre: req.body.nombre });
+    const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero });
     // Check if Genre with same name already exists.
       const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec();
       if (restauranteExists) {
@@ -32,3 +32,11 @@ exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
         res.redirect('/restaurantes');
       }
     });
+
+exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
+  const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
+  console.log(restaurante)
+  const nombreRestaurante = restaurante.nombre
+
+  res.render('restaurantes/restauranteDetail', {nombre: nombreRestaurante, datos: restaurante})
+  });
