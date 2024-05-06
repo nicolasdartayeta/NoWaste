@@ -24,17 +24,6 @@ services:
       - EXPRESS_SKIP_BOWER_INSTALL=0
       - EXPRESS_DEFAULT_MONGODB_DATABASE_PORT_NUMBER=27017
     volumes:
-      - 'C:\Users\ignah\Desktop\NoWaste\my-project:/app'
-    depends_on:
-      - mongodb
-
-  nodejs:
-    build:
-      context: .
-      dockerfile: Dockerfile-nodejs
-    volumes:
-      - '.:/my-project'
-    ports:
-      - "3000:3000"
+      - './my-project:/app'
     depends_on:
       - mongodb
