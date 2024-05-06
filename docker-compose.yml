@@ -8,6 +8,7 @@ services:
     image: docker.io/bitnami/mongodb:4.4
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+
   express:
     image: docker.io/bitnami/express:4
     ports:
