@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require("body-parser"); 
 
+const mongoConfig = require('./config/mongo');
 var indexRouter = require('./routes/index');
 var restaurantesRouter = require('./routes/restaurantes')
 
@@ -16,7 +17,7 @@ var app = express();
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const mongoDB = "mongodb://nicolas:nicolas@mongodb:27017/NoWasteDB";
+const mongoDB = mongoConfig.mongoDBUri;
 
 main().catch((err) => console.log(err));
 async function main() {
