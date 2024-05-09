@@ -7,6 +7,11 @@ const restauranteSchema = new Schema({
   nombre: String,
   calle: String,
   numero: Number,
+  producto: [{
+                nombre: String,
+                descripcion: String,
+                precio: Number
+            }],
 });
 
 // Export function to create "Restaurante" model class

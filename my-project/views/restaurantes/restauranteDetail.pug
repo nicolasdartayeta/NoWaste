@@ -7,5 +7,11 @@ block content
         ul 
             each dato, atributo in datos
                 li #{atributo}: #{dato}
+            ul(style="margin-top: 20px;")
+                each producto in datos.producto
+                    each valor, atributo in producto
+                        li #{atributo}: #{valor}
     else 
         p No hay datos
+
+    a(href="/restaurantes/show/"+datos._id+"/addProduct") #{"Agregar Producto"}
