@@ -7,10 +7,13 @@ block content
         ul 
             each dato, atributo in datos
                 li #{atributo}: #{dato}
-            ul(style="margin-top: 20px;")
-                each producto in datos.producto
-                    each valor, atributo in producto
-                        li #{atributo}: #{valor}
+            if ('producto' in datos)
+                ul(style="margin-top: 20px;")
+                    each producto in datos.producto
+                        each valor, atributo in producto
+                            li #{atributo}: #{valor}
+            else 
+                p Este restaurante no tiene productos
     else 
         p No hay datos
 
