@@ -3,4 +3,4 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  a(href='/restaurantes') Restaurantes
+  button(hx-get= "/restaurantes" hx-swap="outerHTML") Restaurantes

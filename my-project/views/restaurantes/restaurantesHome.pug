@@ -2,6 +2,6 @@ extends ../layout
 
 block content
   h1 Home Restaurantes
-  a(href='/' + path + '/add') Add restaurante
+  button(hx-get="/"+path+"/add" hx-swap="outerHTML") Add restaurante
   br
-  a(href='/' + path + '/show') Show restaurantes
+  button(hx-get="/"+path+"/show" hx-swap="outerHTML") Show restaurantes
