@@ -16,6 +16,10 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
 exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
     res.render('restaurantes/addRestaurante')
   });
+
+exports.restauranteAdded = asyncHandler(async (req, res, next) => {
+  res.render('restaurantes/restauranteAgregado')
+});
   
   // Handle Restaurante create on POST.
 exports.restaurante_create_post = asyncHandler(async (req, res, next) => {

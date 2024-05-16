@@ -23,4 +23,7 @@ router.route('/')
     .get(restauranteController.add_product) 
     .post(restauranteController.add_product_post)
 
+  router.route('/agregado')
+    .get(restauranteController.restauranteAdded)
+
 module.exports = router;
