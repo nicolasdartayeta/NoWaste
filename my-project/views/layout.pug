@@ -1,8 +1,14 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title NoWaste
+    link(rel='stylesheet', href='/static/stylesheets/style.css')
     script(src="https://unpkg.com/htmx.org@1.8.4")
   body
-    block content
+    header 
+      a(href='/')
+        h1 NoWaste 
+    section#sidebar
+      block sidebar
+    section#content 
+      block content 

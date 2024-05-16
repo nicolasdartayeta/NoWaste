@@ -1,21 +1,18 @@
-extends ../layout
+h2= nombre 
 
-block content 
-    h1= nombre 
+if datos.length != 0
+    ul 
+        each dato, atributo in datos
+            li #{atributo}: #{dato}
+        if ('producto' in datos)
+            ul(style="margin-top: 20px;")
+                each producto in datos.producto
+                    each valor, atributo in producto
+                        li #{atributo}: #{valor}
+                    br
+        else 
+            p Este restaurante no tiene productos
+else 
+    p No hay datos
 
-    if datos.length != 0
-        ul 
-            each dato, atributo in datos
-                li #{atributo}: #{dato}
-            if ('producto' in datos)
-                ul(style="margin-top: 20px;")
-                    each producto in datos.producto
-                        each valor, atributo in producto
-                            li #{atributo}: #{valor}
-                        br
-            else 
-                p Este restaurante no tiene productos
-    else 
-        p No hay datos
-
-    a(href="/restaurantes/show/"+datos._id+"/addProduct") Agregar Producto
+a(href="/restaurantes/show/"+datos._id+"/addProduct") Agregar Producto

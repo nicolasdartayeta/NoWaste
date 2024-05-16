@@ -14,8 +14,15 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
 
 // Display Restaurante create form on GET.
 exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
+  // Si la request es de HTMX devuelve solo el cachito de HTML correspondiente al form para agregar un restaurante
+  // Si la request no es de HTMX carga la pagina home de restaurantes, con la form para agregar un restaurante
+  // en el bloque content.
+  if (req.headers['hx-request']) {
     res.render('restaurantes/addRestaurante')
-  });
+  } else {
+    res.render('restaurantes/restaurantesHome', { action: 'add', path: 'restaurantes'})
+  }
+});
 
 exports.restauranteAdded = asyncHandler(async (req, res, next) => {
   res.render('restaurantes/restauranteAgregado')
@@ -39,10 +46,18 @@ exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
 
 exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
-  console.log(restaurante)
   const nombreRestaurante = restaurante.nombre
 
-  res.render('restaurantes/restauranteDetail', {nombre: nombreRestaurante, datos: restaurante})
+  // Si la request es de HTMX devuelve solo el cachito de HTML con el detalle del restaurante pedido
+  // Si la request NO es de HTMX devuelve la pagina con el sidebar con la lista de restaurantes,
+  // y el restaurante solicitado en content.
+  if (req.headers['hx-request']) {
+    res.render('restaurantes/restauranteDetail', {nombre: nombreRestaurante, datos: restaurante})
+  } else {
+    const restaurantes = await restauranteModel.find().exec();
+
+    res.render('restaurantes/listRestaurantes', {action: 'detail', title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante})
+  }
   });
 
 exports.add_product = asyncHandler(async (req, res, next) => {

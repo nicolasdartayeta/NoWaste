@@ -1,6 +1,5 @@
 extends layout
 
-block content
-  h1= title
-  p Welcome to #{title}
-  button(hx-get= "/restaurantes" hx-swap="outerHTML") Restaurantes
+block sidebar
+  p Welcome to NoWaste
+  a(href='/restaurantes') Ver restaurantes

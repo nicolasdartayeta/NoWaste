@@ -1,7 +1,12 @@
 extends ../layout
 
-block content
-  h1 Home Restaurantes
-  button(hx-get="/"+path+"/add" hx-swap="outerHTML") Add restaurante
+block sidebar
+  p Restaurantes
+  button(hx-get="/"+path+"/add" hx-target="#content" hx-push-url='true') Add restaurante
   br
-  button(hx-get="/"+path+"/show" hx-swap="outerHTML") Show restaurantes
+  a(href="/"+path+"/show") Show restaurantes
+
+block content 
+  case action 
+    when 'add'
+      include addRestaurante.pug
