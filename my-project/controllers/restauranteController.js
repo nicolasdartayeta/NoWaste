@@ -95,3 +95,8 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
     res.send('ERROR al agregar restaurante');
   }
   });
+
+exports.restaurante_delete = asyncHandler(async (req, res, next) => {
+  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
+  res.send()
+});

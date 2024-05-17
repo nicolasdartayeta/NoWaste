@@ -5,8 +5,9 @@ block sidebar
     if restaurantesList.length 
         ul 
             each restaurante in restaurantesList
-                li 
+                li(id=restaurante.id)
                     a(hx-get='/restaurantes/show/' + restaurante.id hx-target="#content" hx-push-url='true') #{restaurante.nombre}
+                    button(hx-delete='/restaurantes/delete/'+restaurante.id hx-target='closest li' hx-swap="outerHTML") X
     else 
         p No hay restaurantes
 
