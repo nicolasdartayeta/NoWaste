@@ -23,26 +23,22 @@ exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
     res.render('restaurantes/restaurantesHome', { action: 'add', path: 'restaurantes'})
   }
 });
-
-exports.restauranteAdded = asyncHandler(async (req, res, next) => {
-  res.render('restaurantes/restauranteAgregado')
-});
   
-  // Handle Restaurante create on POST.
+// Handle Restaurante create on POST.
 exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
-    // Create a genre object with escaped and trimmed data.
-    const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero });
-    // Check if Genre with same name already exists.
-      const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec();
-      if (restauranteExists) {
-        // Genre exists, redirect to its detail page.
-        res.send('ERROR al agregar restaurante');
-      } else {
-        await restaurante.save();
-        // New genre saved. Redirect to genre detail page.
-        res.redirect('/restaurantes');
-      }
-    });
+  // Create a genre object with escaped and trimmed data.
+  const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero });
+  // Check if Genre with same name already exists.
+    const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec();
+    if (restauranteExists) {
+      // Restaurante exists, redirect to its detail page.
+      res.send('ERROR al agregar restaurante');
+    } else {
+      await restaurante.save();
+      // New restaurante saved. Redirect to genre detail page.
+      res.render('restaurantes/restauranteAgregado');
+    }
+ });
 
 exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()

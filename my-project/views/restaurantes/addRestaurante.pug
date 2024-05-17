@@ -9,7 +9,7 @@ block content
         input#nombre.form-control(type='text', placeholder='Calle' name='calle' required)
         label(for='numero') Numero:
         input#nombre.form-control(type='text', placeholder='Numero' name='numero' required)
-      button.btn.btn-primary(type='submit' hx-get="/restaurantes/agregado" hx-swap="outerHTML" hx-target="#formNewRestaurante") Add restaurante
+      button.btn.btn-primary(type='submit' hx-post="/restaurantes/add" hx-target="#content") Add restaurante
 
   if errors
     ul

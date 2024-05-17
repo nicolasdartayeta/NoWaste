@@ -11,6 +11,7 @@ router.route('/')
 
 router.route('/delete/:restauranteId')
   .delete(restauranteController.restaurante_delete)
+
 router.route('/add')
   .get(restauranteController.restaurante_create_get)
   .post(restauranteController.restaurante_create_post)
@@ -24,8 +25,5 @@ router.route('/show/:restauranteId')
 router.route('/show/:restauranteId/addProduct')
   .get(restauranteController.add_product) 
   .post(restauranteController.add_product_post)
-
-router.route('/agregado')
-  .get(restauranteController.restauranteAdded)
 
 module.exports = router;
