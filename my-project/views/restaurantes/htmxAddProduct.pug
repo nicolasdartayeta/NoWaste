@@ -9,7 +9,7 @@ form(action= "/restaurantes/"+ restauranteId +"/addProduct" method="post" enctyp
         label(for='precio') Precio:
         input#nombre.form-control(type='text', placeholder='Precio' name='precio' required)
         label(for='imagenProducto') Imagen del producto 
-        input#nombre.form-control(type="file" name="imagenProducto" required)
+        input#nombre.form-control(type="file" accept='image/jpg' name="imagenProducto" multiple required)
     input(type='hidden', name='id', value= restauranteId)
     button.btn.btn-primary(type='submit') Submit
 

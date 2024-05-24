@@ -191,6 +191,6 @@ p + .actions {
 }
 
 #img-producto {
-  width: 300px;
-  height: auto;
+  width: auto;
+  height: 200px;
 }

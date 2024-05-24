@@ -109,14 +109,12 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
     if (existeProduct) {
       res.send('ERROR: El producto ya existe en este restaurante');
     } else {
-      nombreImagen = req.file.filename
+      const imagenes = req.files.map(file => ({id: file.filename}))
       const nuevoProducto = {
         nombre: req.body.nombreProducto,
         descripcion: req.body.descripcion,
         precio: req.body.precio,
-        imagenesProducto: [{
-          id: nombreImagen
-        }],
+        imagenesProducto: imagenes,
       };
        
       // Añade el nuevo producto a la lista de productos del restaurante.
@@ -133,13 +131,13 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
 
 exports.restaurante_delete = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
-  for (producto of restaurante.producto){
+  for (producto of restaurante.producto) {
     for (imagen of producto.imagenesProducto){
       await unlink(`./public/images/${imagen.id}`)
     }
   }
 
   
-  // const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
+  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
   res.send()
 });

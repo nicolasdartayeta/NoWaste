@@ -16,7 +16,7 @@ div(id=datos._id)
                                 li #{atributo}: #{valor}
                             else 
                                 each imagen in valor 
-                                    img#img-producto(src='/static/images/'+imagen.id)
+                                    img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
                         br
             else 
                 p Este restaurante no tiene productos

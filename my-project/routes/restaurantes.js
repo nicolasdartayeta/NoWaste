@@ -22,6 +22,6 @@ router.route('/show/:restauranteId')
 
 router.route('/:restauranteId/addProduct')
   .get(restauranteController.add_product) 
-  .post(restauranteController.imageUploader.single('imagenProducto'), restauranteController.add_product_post)
+  .post(restauranteController.imageUploader.array('imagenProducto'), restauranteController.add_product_post)
 
 module.exports = router;
