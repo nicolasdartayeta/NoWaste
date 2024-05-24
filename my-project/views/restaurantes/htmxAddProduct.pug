@@ -1,6 +1,6 @@
 h1= "Agregar Producto"
 
-form(action= "/restaurantes/"+ restauranteId +"/addProduct", method="post") 
+form(action= "/restaurantes/"+ restauranteId +"/addProduct" method="post" enctype="multipart/form-data") 
     div.form-group
         label(for='nombreProducto') Nombre Del Producto:
         input#nombre.form-control(type='text', placeholder='Nombre Del Producto' name='nombreProducto' required)
@@ -8,6 +8,8 @@ form(action= "/restaurantes/"+ restauranteId +"/addProduct", method="post")
         input#nombre.form-control(type='text', placeholder='Descripcion' name='descripcion' required)
         label(for='precio') Precio:
         input#nombre.form-control(type='text', placeholder='Precio' name='precio' required)
+        label(for='imagenProducto') Imagen del producto 
+        input#nombre.form-control(type="file" name="imagenProducto" required)
     input(type='hidden', name='id', value= restauranteId)
     button.btn.btn-primary(type='submit') Submit
 

@@ -4,6 +4,11 @@ html
     title NoWaste
     link(rel='stylesheet', href='/static/stylesheets/style.css')
     script(src="https://unpkg.com/htmx.org@1.8.4")
+    script.
+      function checkContent(restauranteId) {
+        //- document.getElementById('restauranteId').remove()
+        console.log(restauranteId)
+      }
     block head
   body
     header 

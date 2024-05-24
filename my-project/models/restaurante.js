@@ -7,12 +7,12 @@ const restauranteSchema = new Schema({
   nombre: String,
   calle: String,
   numero: Number,
-  imagen: String,
+  imagenRestaurante: String,
   producto: [{
                 nombre: String,
                 descripcion: String,
                 precio: Number,
-                imagenes: [{
+                imagenesProducto: [{
                   id: String, 
                 }]
             }],

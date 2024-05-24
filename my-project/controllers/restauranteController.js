@@ -1,5 +1,20 @@
 const asyncHandler = require("express-async-handler");
 const restauranteModel = require('../models/restaurante');
+const { unlink } = require('node:fs/promises');
+
+const multer  = require('multer')
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/images')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix + '.jpg')
+  }
+})
+
+exports.imageUploader = multer({ storage: storage})
 
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
@@ -48,25 +63,29 @@ exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
  // ACTUALIZADO
 exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
-  const nombreRestaurante = restaurante.nombre
-  const restaurantes = await restauranteModel.find().exec();
-
-  var template
-  var parametros = { title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante}
-  if (req.headers['hx-request']) {
-    template = 'restaurantes/htmxRestauranteDetail'
+  
+  if (restaurante) {
+    const nombreRestaurante = restaurante.nombre
+    const restaurantes = await restauranteModel.find().exec();
+  
+    var template
+    var parametros = { title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante}
+    if (req.headers['hx-request']) {
+      template = 'restaurantes/htmxRestauranteDetail'
+    } else {
+      template = 'restaurantes/restauranteDetail'
+    }
+  
+    res.render(template, parametros)
   } else {
-    template = 'restaurantes/restauranteDetail'
+    res.redirect('/restaurantes/show')
   }
-
-  res.render(template, parametros)
 });
 
 // ACTUALIZADO
 exports.add_product = asyncHandler(async (req, res, next) => {
   const restauranteId = req.params.restauranteId
   const restaurante = await restauranteModel.findById(restauranteId).lean()
-  console.log(restaurante)
   const nombreRestaurante = restaurante.nombre
 
   var template
@@ -83,22 +102,26 @@ exports.add_product = asyncHandler(async (req, res, next) => {
 
 exports.add_product_post = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.body.id).exec();
-  
+
   if (restaurante) {
     const existeProduct = restaurante.producto.find(producto => producto.nombre === req.body.nombreProducto);
 
     if (existeProduct) {
       res.send('ERROR: El producto ya existe en este restaurante');
     } else {
+      nombreImagen = req.file.filename
       const nuevoProducto = {
         nombre: req.body.nombreProducto,
         descripcion: req.body.descripcion,
-        precio: req.body.precio
+        precio: req.body.precio,
+        imagenesProducto: [{
+          id: nombreImagen
+        }],
       };
-        
+       
       // Añade el nuevo producto a la lista de productos del restaurante.
       restaurante.producto.push(nuevoProducto);
-    
+
       // Guarda el restaurante actualizado en la base de datos.
       await restaurante.save();
       res.redirect(`/restaurantes/show/${req.body.id}`);
@@ -109,6 +132,14 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
   });
 
 exports.restaurante_delete = asyncHandler(async (req, res, next) => {
-  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
+  const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
+  for (producto of restaurante.producto){
+    for (imagen of producto.imagenesProducto){
+      await unlink(`./public/images/${imagen.id}`)
+    }
+  }
+
+  
+  // const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
   res.send()
 });

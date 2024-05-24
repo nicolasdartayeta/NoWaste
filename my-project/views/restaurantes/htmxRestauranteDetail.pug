@@ -1,21 +1,26 @@
-h2= nombre 
-if datos.imagen 
-    img(src='/static/images/'+datos._id+'.jpg')
-if datos.length != 0
-    ul 
-        each dato, atributo in datos
-            if (atributo != 'imagen')
-                li #{atributo}: #{dato}
-        if (datos.producto.length != 0)
-            h3 Productos
-            ul(style="margin-top: 20px;")
-                each producto in datos.producto
-                    each valor, atributo in producto
-                        li #{atributo}: #{valor}
-                    br
-        else 
-            p Este restaurante no tiene productos
-else 
-    p No hay datos
+div(id=datos._id)
+    h2= nombre 
+    if datos.imagen 
+        img(src='/static/images/'+datos._id+'.jpg')
+    if datos.length != 0
+        ul 
+            each dato, atributo in datos
+                if (atributo != 'imagen')
+                    li #{atributo}: #{dato}
+            if (datos.producto.length != 0)
+                h3 Productos
+                ul(style="margin-top: 20px;")
+                    each producto in datos.producto
+                        each valor, atributo in producto
+                            if (atributo != 'imagenesProducto')
+                                li #{atributo}: #{valor}
+                            else 
+                                each imagen in valor 
+                                    img#img-producto(src='/static/images/'+imagen.id)
+                        br
+            else 
+                p Este restaurante no tiene productos
+    else 
+        p No hay datos
 
-button(hx-get="/restaurantes/"+datos._id+"/addProduct" hx-target="#content") Agregar Producto
+    button(hx-get="/restaurantes/"+datos._id+"/addProduct" hx-target="#content") Agregar Producto
