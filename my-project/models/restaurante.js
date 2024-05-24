@@ -7,10 +7,14 @@ const restauranteSchema = new Schema({
   nombre: String,
   calle: String,
   numero: Number,
+  imagen: String,
   producto: [{
                 nombre: String,
                 descripcion: String,
-                precio: Number
+                precio: Number,
+                imagenes: [{
+                  id: String, 
+                }]
             }],
 });
 

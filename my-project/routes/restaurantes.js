@@ -22,7 +22,7 @@ router.route('/show')
 router.route('/show/:restauranteId')
   .get(restauranteController.restaurante_detail)
 
-router.route('/show/:restauranteId/addProduct')
+router.route('/:restauranteId/addProduct')
   .get(restauranteController.add_product) 
   .post(restauranteController.add_product_post)
 

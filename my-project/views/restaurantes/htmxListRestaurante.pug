@@ -1,0 +1,11 @@
+p=title 
+if restaurantesList.length 
+    ul 
+        each restaurante in restaurantesList
+            li(id=restaurante.id)
+                a(hx-get='/restaurantes/show/' + restaurante.id hx-target="#content" hx-replace-url='/restaurantes/show/' + restaurante.id) #{restaurante.nombre}
+                button(hx-delete='/restaurantes/delete/'+restaurante.id hx-target='closest li' hx-swap="outerHTML") X
+else 
+    p No hay restaurantes
+
+button(onclick="window.location.href='/'") Ir a la página principal

@@ -1,18 +1,7 @@
-h2= nombre 
+extends ../layout
 
-if datos.length != 0
-    ul 
-        each dato, atributo in datos
-            li #{atributo}: #{dato}
-        if ('producto' in datos)
-            ul(style="margin-top: 20px;")
-                each producto in datos.producto
-                    each valor, atributo in producto
-                        li #{atributo}: #{valor}
-                    br
-        else 
-            p Este restaurante no tiene productos
-else 
-    p No hay datos
+block sidebar 
+    include htmxListRestaurante.pug
 
-a(href="/restaurantes/show/"+datos._id+"/addProduct") Agregar Producto
+block content
+    include htmxRestauranteDetail.pug

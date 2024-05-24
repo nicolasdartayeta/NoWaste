@@ -4,9 +4,9 @@ block sidebar
   p Restaurantes
   button(hx-get="/"+path+"/add" hx-target="#content" hx-push-url='true') Add restaurante
   br
-  a(href="/"+path+"/show") Show restaurantes
+  button(hx-get="/"+path+"/show" hx-target='#sidebar' hx-push-url='true') Show restaurantes
 
 block content 
   case action 
     when 'add'
-      include addRestaurante.pug
+      include htmxAddRestaurante.pug

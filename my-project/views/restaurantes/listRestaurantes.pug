@@ -1,21 +1,7 @@
 extends ../layout
 
 block sidebar 
-    p=title 
-    if restaurantesList.length 
-        ul 
-            each restaurante in restaurantesList
-                li(id=restaurante.id)
-                    a(hx-get='/restaurantes/show/' + restaurante.id hx-target="#content" hx-push-url='true') #{restaurante.nombre}
-                    button(hx-delete='/restaurantes/delete/'+restaurante.id hx-target='closest li' hx-swap="outerHTML") X
-    else 
-        p No hay restaurantes
-
-    button(onclick="window.location.href='/'") Ir a la página principal
+    include htmxListRestaurante.pug
 
 block content
-    case action 
-        when 'detail'
-            include restauranteDetail.pug
-        default 
-            p Elegi un restaurante!
+    p Elegi un restaurante!
