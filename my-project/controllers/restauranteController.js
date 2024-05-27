@@ -40,6 +40,7 @@ exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
   } else {
     template = 'restaurantes/restaurantesHome'
     parametros['action'] = 'add'
+    parametros['path'] = 'restaurantes'
   }
 
   res.render(template, parametros)
