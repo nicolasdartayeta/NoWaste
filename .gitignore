@@ -2,4 +2,4 @@
 my-project/node_modules/
 my-project/.vscode/
 my-project/config/mongo.js
-
+my-project/public/images/*

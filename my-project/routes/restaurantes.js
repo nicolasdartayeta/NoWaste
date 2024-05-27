@@ -24,4 +24,11 @@ router.route('/:restauranteId/addProduct')
   .get(restauranteController.add_product) 
   .post(restauranteController.imageUploader.array('imagenProducto'), restauranteController.add_product_post)
 
+router.route('/:restauranteId/editProduct')
+  .get(restauranteController.edit_product) 
+  .post(restauranteController.edit_product_post)
+
+router.route('/:restauranteId/deleteProduct/:nombreProducto') 
+  .delete(restauranteController.delete_producto)
+
 module.exports = router;

@@ -5,7 +5,7 @@ const { unlink } = require('node:fs/promises');
 const multer  = require('multer')
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (req, file, cb) {         //CHECK SI ESTA LA CARPETA O NO
     cb(null, './public/images')
   },
   filename: function (req, file, cb) {
@@ -127,16 +127,96 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
   } else {
     res.send('ERROR al agregar restaurante');
   }
-  });
+});
+
+exports.edit_product = asyncHandler(async (req, res, next) => {
+  const restauranteId = req.params.restauranteId
+  const restaurante = await restauranteModel.findById(restauranteId).lean()
+  const nombreRestaurante = restaurante.nombre
+  const nombreProducto = req.query.nombreProducto
+  const producto = restaurante.producto.find(producto => producto.nombre == nombreProducto)
+
+  var template
+  var parametros = {nombre: nombreRestaurante, restauranteId: restauranteId, datos: restaurante, producto: producto}
+
+  if (req.headers['hx-request']) {
+    template = 'restaurantes/htmxEditProduct'
+  } else {
+    res.redirect(`/restaurantes/show/${restauranteId}`)
+  }
+  
+  res.render(template, parametros)
+});
+
+exports.edit_product_post = asyncHandler(async (req, res, next) => {
+  const restaurante = await restauranteModel.findById(req.body.id).exec();
+
+  if (restaurante) {
+    const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.body.nombreAnterior);
+    // Actualizar los datos del producto
+    restaurante.producto[productoIndex].nombre = req.body.nombreProducto;
+    restaurante.producto[productoIndex].descripcion = req.body.descripcion;
+    restaurante.producto[productoIndex].precio = req.body.precio;
+
+    await restaurante.save();
+    res.redirect(`/restaurantes/show/${req.body.id}`);
+  } else {
+    res.send('ERROR al agregar restaurante');
+  }
+});
+
+exports.delete_producto = asyncHandler(async (req, res, next) => {
+  const restaurante = await restauranteModel.findById(req.params.restauranteId).exec();
+  console.log(req.params.nombreProducto);
+  const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.params.nombreProducto);
+  console.log(productoIndex);
+  for (imagen of restaurante.producto[productoIndex].imagenesProducto){
+    try {
+        console.log(imagen.id);
+        await unlink(`./public/images/${imagen.id}`);
+        console.log(`Imagen ${imagenId} eliminada exitosamente.`);
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            console.error(`La imagen con id ${imagen.id} no se encontró.`);
+        } else {
+            console.error(`Error al intentar eliminar la imagen: ${error.message}`);
+        }
+    } //TRY AND CATCH
+  }
+  // Elimina el producto del arreglo producto del restaurante
+  restaurante.producto.splice(productoIndex, 1);
+  // Guarda los cambios en la base de datos
+  try{
+    await restaurante.save();
+  } catch(error){
+    console.error(error);
+  };
+  res.status(200).send();
+});
+
 
 exports.restaurante_delete = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
   for (producto of restaurante.producto) {
     for (imagen of producto.imagenesProducto){
-      await unlink(`./public/images/${imagen.id}`)
+      try {
+          await unlink(`./public/images/${imagenId}`);
+          console.log(`Imagen ${imagenId} eliminada exitosamente.`);
+      } catch (error) {
+          if (error.code === 'ENOENT') {
+              console.error(`La imagen con id ${imagenId} no se encontró.`);
+          } else {
+              console.error(`Error al intentar eliminar la imagen: ${error.message}`);
+          }
+      } //TRY AND CATCH
     }
-  }
+  };
 
+<<<<<<< HEAD
   const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
   res.send()
+=======
+  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec();
+  res.send();
+>>>>>>> 33cf0742a1ba2c55c971046d5fa9141e3ab2ea02
 });

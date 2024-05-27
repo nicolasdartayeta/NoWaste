@@ -1,0 +1,18 @@
+h1= "Editar Producto"
+
+form(action= "/restaurantes/"+ restauranteId +"/editProduct" method="post") 
+    div.form-group
+        label(for='nombreProducto') Nombre Del Producto:
+        input#nombre.form-control(type='text', placeholder='Nombre Del Producto' name='nombreProducto' value=producto.nombre required)
+        label(for='descripcion') Descripcion:
+        input#nombre.form-control(type='text', placeholder='Descripcion' name='descripcion' value=producto.descripcion required)
+        label(for='precio') Precio:
+        input#nombre.form-control(type='text', placeholder='Precio' name='precio' value=producto.precio required)
+    input(type='hidden', name='id', value= restauranteId)
+    input(type='hidden', name='nombreAnterior', value= producto.nombre)
+    button.btn.btn-primary(type='submit') Submit
+
+if errors
+    ul
+        for error in errors
+            li!= error.msg
