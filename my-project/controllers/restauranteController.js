@@ -137,7 +137,6 @@ exports.restaurante_delete = asyncHandler(async (req, res, next) => {
     }
   }
 
-  
   const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
   res.send()
 });
