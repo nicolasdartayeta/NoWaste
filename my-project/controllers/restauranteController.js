@@ -212,11 +212,6 @@ exports.restaurante_delete = asyncHandler(async (req, res, next) => {
     }
   };
 
-<<<<<<< HEAD
   const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
   res.send()
-=======
-  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec();
-  res.send();
->>>>>>> 33cf0742a1ba2c55c971046d5fa9141e3ab2ea02
 });
