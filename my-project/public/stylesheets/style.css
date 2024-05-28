@@ -1,3 +1,4 @@
+@import url('styleRestaurante.css');
 :root {
   --color-primary: #3273dc;
   --color-secondary: #23d160;
@@ -188,9 +189,4 @@ p + .actions {
   background-color: var(--color-flash);
   border-radius: 3px;
   box-shadow: 0 2px 4px var(--color-shadow);
-}
-
-#img-producto {
-  width: auto;
-  height: 200px;
 }

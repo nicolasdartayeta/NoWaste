@@ -9,19 +9,23 @@ div(id=datos._id)
                     li #{atributo}: #{dato}
             if (datos.producto.length != 0)
                 h3 Productos
-                ul(style="margin-top: 20px;")
+                ul.listaProductos(style="margin-top: 20px;")
                     each producto in datos.producto
-                        each valor, atributo in producto
-                            if (atributo != 'imagenesProducto')
-                                li #{atributo}: #{valor}
-                                    if (atributo == 'nombre')
-                                        button(hx-get="/restaurantes/"+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") edit
-                                        button(hx-delete="/restaurantes/"+datos._id+"/deleteProduct/"+valor hx-target="#content") delete
-                                    //prodcuto tiene _id???
-                            else 
-                                each imagen in valor 
-                                    img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
-                        br
+                        li.producto
+                            each valor, atributo in producto
+                                if (atributo != 'imagenesProducto')
+                                    p #{atributo}: #{valor}
+                                        if (atributo == 'nombre')
+                                            button(hx-get="/restaurantes/"+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") edit
+                                            button(hx-delete="/restaurantes/"+datos._id+"/deleteProduct/"+valor hx-target="#content") delete
+                                        //prodcuto tiene _id???
+                                else  
+                                    .slider
+                                        .slides
+                                                each imagen in valor
+                                                    .slide
+                                                    div
+                                                        img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
             else 
                 p Este restaurante no tiene productos
     else 
