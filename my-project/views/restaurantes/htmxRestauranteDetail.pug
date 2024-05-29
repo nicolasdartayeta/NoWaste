@@ -21,11 +21,13 @@ div(id=datos._id)
                                         //prodcuto tiene _id???
                                 else  
                                     .slider
+                                        button#btn-derecha() derecha
+                                        button#btn-izquierda() izquierda
                                         .slides
                                                 each imagen in valor
                                                     .slide
-                                                    div
                                                         img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
+                                                        
             else 
                 p Este restaurante no tiene productos
     else 

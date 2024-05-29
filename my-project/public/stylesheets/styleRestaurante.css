@@ -1,20 +1,55 @@
 ul.listaProductos {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, 400px);
     justify-content: center; /* Ajusta según lo necesites: space-around, space-evenly, etc. */
     padding: 0;
     list-style: none;
+    box-sizing: border-box;
 }
 
+@media screen and (max-width: 768px) {
+    .ul.listaProductos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+}
+  
+@media screen and (max-width: 480px) {
+    .ul.listaProductos {
+      grid-template-columns: 1fr;
+    }
+}
 #img-producto {
     width: auto;
     height: 200px;
 }
+#btn-derecha{
+    position: absolute;  /* Posiciona los botones dentro del contenedor relativo */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);  /* Fondo semi-transparente */
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;  /* Asegura que los botones estén sobre la imagen */
+    right: 10px;  /* Posiciona el botón derecho */
+}
+#btn-izquierda{
+    position: absolute;  /* Posiciona los botones dentro del contenedor relativo */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);  /* Fondo semi-transparente */
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;  /* Asegura que los botones estén sobre la imagen */
+    left: 10px;
+}
 
 .slider {
-    width: auto;
+    width: 350px;
     height: 200px;
-    max-width: 50%;
     overflow: hidden;
     position: relative;
     border-radius: 10px;
@@ -23,29 +58,10 @@ ul.listaProductos {
 
 .slides {
     display: flex;
-    animation: slide 10s infinite;
 }
   
 .slide {
     width: auto;
     height: 200px;
     flex-shrink: 0;
-}
-  
-.slide img {
-    width: 100%;
-    display: block;
-    border-radius: 10px;
-}
-  
-@keyframes slide {
-    0% { transform: translateX(0%); }
-    20% { transform: translateX(0%); }
-    25% { transform: translateX(-100%); }
-    45% { transform: translateX(-100%); }
-    50% { transform: translateX(-200%); }
-    70% { transform: translateX(-200%); }
-    75% { transform: translateX(-300%); }
-    95% { transform: translateX(-300%); }
-    100% { transform: translateX(-4000%); }
 }
