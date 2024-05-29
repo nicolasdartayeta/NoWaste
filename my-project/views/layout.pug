@@ -47,18 +47,18 @@ html
               console.log(btnIzquierda);
               const btnDerecha = slider.querySelector("#btn-derecha");
               let currentIndex = 0;
+              const slideWidth = slides.children[0].offsetWidth; // Ancho de cada diapositiva
               const percentage = 100;
               btnIzquierda.addEventListener("click", () => {
                   currentIndex = (currentIndex > 0) ? currentIndex - 1 : slideCount - 1;
-                  const translateX = -currentIndex * percentage;
-                  slides.style.transform = `translateX(${translateX}%)`;
+                  const translateX = -currentIndex * slideWidth;
+                  slides.style.transform = `translateX(${translateX}px)`;
               });
 
               btnDerecha.addEventListener("click", () => {
                   currentIndex = (currentIndex < slideCount - 1) ? currentIndex + 1 : 0;
-                  const translateX = -currentIndex * percentage;
-                  slides.style.transform = `translateX(${translateX}%)`;
-              });
+                  const translateX = -currentIndex * slideWidth;
+                  slides.style.transform = `translateX(${translateX}px)`;              });
           });
       });
     header 
