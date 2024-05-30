@@ -1,6 +1,6 @@
 h1 Agregar restaurante
 div(id="formNewRestaurante")
-  form(action="/restaurantes/add", method="post") 
+  form(action="/admin/restaurantes/add", method="post") 
     div.form-group
       label(for='nombre') Nombre:
       input#nombre.form-control(type='text', placeholder='Nombre' name='nombre' required)
@@ -8,7 +8,7 @@ div(id="formNewRestaurante")
       input#nombre.form-control(type='text', placeholder='Calle' name='calle' required)
       label(for='numero') Numero:
       input#nombre.form-control(type='text', placeholder='Numero' name='numero' required)
-    button.btn.btn-primary(type='submit' hx-post="/restaurantes/add" hx-target="#content") Add restaurante
+    button.btn.btn-primary(type='submit' hx-post="/admin/restaurantes/add" hx-target="#content") Add restaurante
 
 if errors
   ul

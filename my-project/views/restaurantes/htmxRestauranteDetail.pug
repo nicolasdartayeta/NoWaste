@@ -15,8 +15,8 @@ div(id=datos._id)
                             if (atributo != 'imagenesProducto')
                                 li #{atributo}: #{valor}
                                     if (atributo == 'nombre')
-                                        button(hx-get="/restaurantes/"+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") edit
-                                        button(hx-delete="/restaurantes/"+datos._id+"/deleteProduct/"+valor hx-target="#content") delete
+                                        button(hx-get="/admin/restaurantes/"+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") edit
+                                        button(hx-delete="/admin/restaurantes/"+datos._id+"/deleteProduct/"+valor hx-target="#content") delete
                                     //prodcuto tiene _id???
                             else 
                                 each imagen in valor 
@@ -27,4 +27,4 @@ div(id=datos._id)
     else 
         p No hay datos
 
-    button(hx-get="/restaurantes/"+datos._id+"/addProduct" hx-target="#content") Agregar Producto
+    button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content") Agregar Producto

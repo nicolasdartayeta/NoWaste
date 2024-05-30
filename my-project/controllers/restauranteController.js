@@ -80,7 +80,7 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
   
     res.render(template, parametros)
   } else {
-    res.redirect('/restaurantes/show')
+    res.redirect('/admin/restaurantes/show')
   }
 });
 
@@ -96,7 +96,7 @@ exports.add_product = asyncHandler(async (req, res, next) => {
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddProduct'
   } else {
-    res.redirect(`/restaurantes/show/${restauranteId}`)
+    res.redirect(`/admin/restaurantes/show/${restauranteId}`)
   }
   
   res.render(template, parametros)
@@ -124,7 +124,7 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
 
       // Guarda el restaurante actualizado en la base de datos.
       await restaurante.save();
-      res.redirect(`/restaurantes/show/${req.body.id}`);
+      res.redirect(`/admin/restaurantes/show/${req.body.id}`);
     }
   } else {
     res.send('ERROR al agregar restaurante');
@@ -144,7 +144,7 @@ exports.edit_product = asyncHandler(async (req, res, next) => {
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxEditProduct'
   } else {
-    res.redirect(`/restaurantes/show/${restauranteId}`)
+    res.redirect(`/admin/restaurantes/show/${restauranteId}`)
   }
   
   res.render(template, parametros)
@@ -161,7 +161,7 @@ exports.edit_product_post = asyncHandler(async (req, res, next) => {
     restaurante.producto[productoIndex].precio = req.body.precio;
 
     await restaurante.save();
-    res.redirect(`/restaurantes/show/${req.body.id}`);
+    res.redirect(`/admin/restaurantes/show/${req.body.id}`);
   } else {
     res.send('ERROR al agregar restaurante');
   }

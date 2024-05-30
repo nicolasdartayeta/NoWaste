@@ -6,7 +6,7 @@ var restauranteController = require('../controllers/restauranteController')
 /* home restuarate */
 router.route('/')
   .get(function(req, res, next) {
-    res.render('restaurantes/restaurantesHome', { path: 'restaurantes'})
+    res.render('restaurantes/restaurantesHome', { path: '/restaurantes'})
   })
 
 router.route('/add')

@@ -1,6 +1,6 @@
 h1= "Agregar Producto"
 
-form(action= "/restaurantes/"+ restauranteId +"/addProduct" method="post" enctype="multipart/form-data") 
+form(action= "/admin/restaurantes/"+ restauranteId +"/addProduct" method="post" enctype="multipart/form-data") 
     div.form-group
         label(for='nombreProducto') Nombre Del Producto:
         input#nombre.form-control(type='text', placeholder='Nombre Del Producto' name='nombreProducto' required)
