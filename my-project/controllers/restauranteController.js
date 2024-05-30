@@ -177,6 +177,7 @@ exports.delete_producto = asyncHandler(async (req, res, next) => {
         console.log(imagen.id);
         await unlink(`./public/images/${imagen.id}`);
         console.log(`Imagen ${imagenId} eliminada exitosamente.`);
+        res.redirect(`/restaurantes/show/${req.params.restauranteId}`)
     } catch (error) {
         if (error.code === 'ENOENT') {
             console.error(`La imagen con id ${imagen.id} no se encontró.`);

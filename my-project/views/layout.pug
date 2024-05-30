@@ -11,6 +11,56 @@ html
       }
     block head
   body
+    script.
+      document.addEventListener("DOMContentLoaded", () => {
+          const sliders = document.querySelectorAll ('.slider');
+          console.log(sliders);
+          sliders.forEach((slider, index) => {
+              const slides = slider.querySelector('.slides');
+              console.log(slider);
+              const slideCount = slides.childElementCount;
+              //- if (slideCount > 1) {
+              //-     const percentage = 100 / (slideCount*2);
+              //-     let keyframes = `@keyframes slide${index} {`;
+
+              //-     // Genera los keyframes para el desplazamiento hacia adelante y hacia atrás
+              //-     for (let i = 0; i < slideCount; i++) {
+              //-         keyframes += `
+              //-         ${i * percentage * 2}% { transform: translateX(-${i * 100}%); }
+              //-         `;
+              //-     }
+
+              //-     // Genera los keyframes para el desplazamiento hacia atrás
+              //-     for (let i = slideCount - 1; i >= 0; i--) {
+              //-         keyframes += `
+              //-         ${(slideCount - i) * percentage * 2}% { transform: translateX(-${i * 100}%); }
+              //-         `;
+              //-     }
+              //-     keyframes += `}`;
+
+              //-     const styleSheet = document.styleSheets[0];
+              //-     styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
+
+              //-     slides.style.animation = `slide${index} ${slideCount * 3}s infinite`;
+              //- }
+              const btnIzquierda = slider.querySelector("#btn-izquierda");
+              console.log(btnIzquierda);
+              const btnDerecha = slider.querySelector("#btn-derecha");
+              let currentIndex = 0;
+              const slideWidth = slides.children[0].offsetWidth; // Ancho de cada diapositiva
+              const percentage = 100;
+              btnIzquierda.addEventListener("click", () => {
+                  currentIndex = (currentIndex > 0) ? currentIndex - 1 : slideCount - 1;
+                  const translateX = -currentIndex * slideWidth;
+                  slides.style.transform = `translateX(${translateX}px)`;
+              });
+
+              btnDerecha.addEventListener("click", () => {
+                  currentIndex = (currentIndex < slideCount - 1) ? currentIndex + 1 : 0;
+                  const translateX = -currentIndex * slideWidth;
+                  slides.style.transform = `translateX(${translateX}px)`;              });
+          });
+      });
     header 
       a(href='/')
         h1 NoWaste

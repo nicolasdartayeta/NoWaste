@@ -1,0 +1,74 @@
+ul.listaProductos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 400px);
+    justify-content: center; /* Ajusta según lo necesites: space-around, space-evenly, etc. */
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+    .ul.listaProductos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+}
+  
+@media screen and (max-width: 480px) {
+    .ul.listaProductos {
+      grid-template-columns: 1fr;
+    }
+}
+#img-producto {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    object-fit: contain;
+
+}
+#contenedor-img {
+    width: 350px;
+    height: 200px;
+    background-color: white;
+    overflow: hidden;
+}
+#btn-derecha{
+    position: absolute;  /* Posiciona los botones dentro del contenedor relativo */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0);  /* Fondo semi-transparente */
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;  /* Asegura que los botones estén sobre la imagen */
+    right: 10px;  /* Posiciona el botón derecho */
+}
+#btn-izquierda{
+    position: absolute;  /* Posiciona los botones dentro del contenedor relativo */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0);  /* Fondo semi-transparente */
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;  /* Asegura que los botones estén sobre la imagen */
+    left: 10px;
+}
+
+.slider {
+    width: 350px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.slides {
+    display: flex;
+}
+  
+.slide {
+    width: 350px; /* Ajusta el ancho de las imágenes al 100% del contenedor */
+    height: auto; /* Permite que la altura se ajuste proporcionalmente */
+}
