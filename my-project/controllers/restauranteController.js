@@ -215,6 +215,18 @@ exports.restaurante_delete = asyncHandler(async (req, res, next) => {
     }
   };
 
-  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec()
-  res.send()
+  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec();
+ 
+  const urlActual = req.get('HX-Current-URL');
+  console.log(urlActual);
+
+  const partesURL = urlActual.split('/');
+  const restauranteIdURL = partesURL[partesURL.length - 1];
+
+  if (req.params.restauranteId === restauranteIdURL){
+    console.log(restauranteIdURL);
+    res.redirect(303,baseURL+'/show');
+  }else{
+    res.status(200).send();
+  }
 });

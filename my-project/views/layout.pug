@@ -6,11 +6,9 @@ html
     script(src="https://unpkg.com/htmx.org@1.8.4")
     script.
       function checkContent(restauranteId) {
-        //- document.getElementById('restauranteId').remove()
+        document.getElementById('restauranteId').remove()
         console.log(restauranteId)
       }
-    block head
-  body
     script.
       document.addEventListener("DOMContentLoaded", () => {
           const sliders = document.querySelectorAll ('.slider');
@@ -37,6 +35,9 @@ html
                   slides.style.transform = `translateX(${translateX}px)`;              });
           });
       });
+    block head
+  body
+    
     header 
       a(href='/')
         h1 NoWaste
