@@ -35,7 +35,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended:true})); 
 
 app.use('/', indexRouter);
-app.use('/restaurantes', restaurantesRouter)
+app.use('/admin/restaurantes', restaurantesRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,6 +1,6 @@
 h1= "Editar Producto"
 
-form(action= "/restaurantes/"+ restauranteId +"/editProduct" method="post") 
+form(action= "/admin/restaurantes/"+ restauranteId +"/editProduct" method="post") 
     div.form-group
         label(for='nombreProducto') Nombre Del Producto:
         input#nombre.form-control(type='text', placeholder='Nombre Del Producto' name='nombreProducto' value=producto.nombre required)
