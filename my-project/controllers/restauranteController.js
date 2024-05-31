@@ -171,22 +171,20 @@ exports.edit_product_post = asyncHandler(async (req, res, next) => {
 
 exports.delete_producto = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).exec();
-  console.log(req.params.nombreProducto);
   const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.params.nombreProducto);
-  console.log(productoIndex);
+  
   for (imagen of restaurante.producto[productoIndex].imagenesProducto){
     try {
-        console.log(imagen.id);
         await unlink(`./public/images/${imagen.id}`);
         console.log(`Imagen ${imagenId} eliminada exitosamente.`);
-        res.redirect(`${baseURL}/show/${req.params.restauranteId}`)
+        // res.redirect(`${baseURL}/show/${req.params.restauranteId}`)
     } catch (error) {
         if (error.code === 'ENOENT') {
             console.error(`La imagen con id ${imagen.id} no se encontró.`);
         } else {
             console.error(`Error al intentar eliminar la imagen: ${error.message}`);
         }
-    } //TRY AND CATCH
+    }
   }
   // Elimina el producto del arreglo producto del restaurante
   restaurante.producto.splice(productoIndex, 1);
@@ -196,7 +194,6 @@ exports.delete_producto = asyncHandler(async (req, res, next) => {
   } catch(error){
     console.error(error);
   };
-  res.redirect(`/restaurantes/show/${req.params.restauranteId}`)
   res.status(200).send();
 });
 

@@ -16,9 +16,9 @@ div(id=datos._id)
                                 if (atributo != 'imagenesProducto')
                                     p #{atributo}: #{valor}
                                         if (atributo == 'nombre')
-                                            button(hx-get="/admin/restaurantes/"+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") 
+                                            button(hx-get=baseURL+'/'+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") 
                                                 img(src="/static/icons/edit.png" alt="edit")
-                                            button(hx-delete="/admin/restaurantes/"+datos._id+"/deleteProduct/"+valor hx-target="closest li" hx-swap='outerHTML') 
+                                            button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+valor hx-target="closest li" hx-swap='outerHTML') 
                                                 img(src="/static/icons/trash.png" alt="delete")
                                         //prodcuto tiene _id???
                                 else  
