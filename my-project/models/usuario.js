@@ -5,9 +5,10 @@ const Schema = mongoose.Schema;
 
 const usuarioSchema = new Schema({
   username: String,
-  password: String,
+  hashedPassword: String,
+  salt: String,
 
 });
 
 // Export function to create "Restaurante" model class
-module.exports = mongoose.model("restaurante", restauranteSchema);
+module.exports = mongoose.model("usuario", usuarioSchema);
