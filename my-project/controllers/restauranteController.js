@@ -15,6 +15,8 @@ const storage = multer.diskStorage({
   }
 })
 
+const baseURL = '/admin/restaurantes'
+
 exports.imageUploader = multer({ storage: storage})
 
 // ACTUALIZADO
@@ -27,7 +29,7 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
     } else {
       template = 'restaurantes/listRestaurantes'
     }  
-    res.render(template, {title: 'Lista de restaurantes', restaurantesList: restaurantes})
+    res.render(template, {baseURL: baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes})
   });
 
 // ACTUALIZADO
@@ -40,8 +42,8 @@ exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
   } else {
     template = 'restaurantes/restaurantesHome'
     parametros['action'] = 'add'
-    parametros['path'] = 'restaurantes'
   }
+  parametros['baseURL'] = baseURL
 
   res.render(template, parametros)
 });
@@ -71,7 +73,7 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
     const restaurantes = await restauranteModel.find().exec();
   
     var template
-    var parametros = { title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante}
+    var parametros = {baseURL: baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante}
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
@@ -80,7 +82,7 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
   
     res.render(template, parametros)
   } else {
-    res.redirect('/admin/restaurantes/show')
+    res.redirect(baseURL+'/show')
   }
 });
 
@@ -91,12 +93,12 @@ exports.add_product = asyncHandler(async (req, res, next) => {
   const nombreRestaurante = restaurante.nombre
 
   var template
-  var parametros = {nombre: nombreRestaurante, restauranteId: restauranteId, datos: restaurante}
+  var parametros = {baseURL: baseURL, nombre: nombreRestaurante, restauranteId: restauranteId, datos: restaurante}
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddProduct'
   } else {
-    res.redirect(`/admin/restaurantes/show/${restauranteId}`)
+    res.redirect(`${baseURL}/show/${restauranteId}`)
   }
   
   res.render(template, parametros)
@@ -124,7 +126,7 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
 
       // Guarda el restaurante actualizado en la base de datos.
       await restaurante.save();
-      res.redirect(`/admin/restaurantes/show/${req.body.id}`);
+      res.redirect(`${baseURL}/show/${req.body.id}`);
     }
   } else {
     res.send('ERROR al agregar restaurante');
@@ -139,12 +141,12 @@ exports.edit_product = asyncHandler(async (req, res, next) => {
   const producto = restaurante.producto.find(producto => producto.nombre == nombreProducto)
 
   var template
-  var parametros = {nombre: nombreRestaurante, restauranteId: restauranteId, datos: restaurante, producto: producto}
+  var parametros = {baseURL: baseURL, nombre: nombreRestaurante, restauranteId: restauranteId, datos: restaurante, producto: producto}
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxEditProduct'
   } else {
-    res.redirect(`/admin/restaurantes/show/${restauranteId}`)
+    res.redirect(`${baseURL}/show/${restauranteId}`)
   }
   
   res.render(template, parametros)
@@ -161,7 +163,7 @@ exports.edit_product_post = asyncHandler(async (req, res, next) => {
     restaurante.producto[productoIndex].precio = req.body.precio;
 
     await restaurante.save();
-    res.redirect(`/admin/restaurantes/show/${req.body.id}`);
+    res.redirect(`${baseURL}/show/${req.body.id}`);
   } else {
     res.send('ERROR al agregar restaurante');
   }
@@ -177,7 +179,7 @@ exports.delete_producto = asyncHandler(async (req, res, next) => {
         console.log(imagen.id);
         await unlink(`./public/images/${imagen.id}`);
         console.log(`Imagen ${imagenId} eliminada exitosamente.`);
-        res.redirect(`/restaurantes/show/${req.params.restauranteId}`)
+        res.redirect(`${baseURL}/show/${req.params.restauranteId}`)
     } catch (error) {
         if (error.code === 'ENOENT') {
             console.error(`La imagen con id ${imagen.id} no se encontró.`);

@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-var restauranteController = require('../controllers/restauranteController')
+var restauranteController = require('../controllers/restauranteController');
+const baseURL = '/admin/restaurantes'
 
 /* home restuarate */
 router.route('/')
   .get(function(req, res, next) {
-    res.render('restaurantes/restaurantesHome', { path: '/restaurantes'})
+    res.render('restaurantes/restaurantesHome', { baseURL: baseURL})
   })
 
 router.route('/add')

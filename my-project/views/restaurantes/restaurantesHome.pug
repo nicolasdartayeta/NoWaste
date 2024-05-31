@@ -8,9 +8,9 @@ block head
 
 block sidebar
   p Restaurantes
-  button(hx-get="/admin"+path+"/add" hx-target="#content" hx-push-url='true') Add restaurante
+  button(hx-get=baseURL+"/add" hx-target="#content" hx-push-url='true') Add restaurante
   br
-  button(hx-get="/admin"+path+"/show" hx-target='#sidebar' hx-push-url='true' onclick='limpiarContent()') Show restaurantes
+  button(hx-get=baseURL+"/show" hx-target='#sidebar' hx-push-url='true' onclick='limpiarContent()') Show restaurantes
 
 block content 
   case action 
