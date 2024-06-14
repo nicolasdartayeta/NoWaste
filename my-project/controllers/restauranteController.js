@@ -50,17 +50,23 @@ exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
   
 // Handle Restaurante create on POST.
 exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
-  // Create a genre object with escaped and trimmed data.
+
+  const { nombre, calle, numero } = req.body;
+
+
+  if (!nombre || !calle || !numero) {
+      return res.status(400).json({ error: 'All fields are required.' });
+  }
+
   const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero });
-  // Check if Genre with same name already exists.
-    const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec();
-    if (restauranteExists) {
-      // Restaurante exists, redirect to its detail page.
-      res.send('ERROR al agregar restaurante');
-    } else {
-      await restaurante.save();
-      // New restaurante saved. Redirect to genre detail page.
-      res.render('restaurantes/restauranteAgregado');
+
+  const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec();
+  if (restauranteExists) {
+    res.send('ERROR al agregar restaurante');
+  }
+  else {
+    await restaurante.save();
+    res.render('restaurantes/restauranteAgregado');
     }
  });
 
