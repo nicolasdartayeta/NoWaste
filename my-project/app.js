@@ -10,6 +10,7 @@ var bodyParser = require("body-parser");
 const mongoConfig = require('./config/mongo');
 var indexRouter = require('./routes/index');
 var restaurantesRouter = require('./routes/restaurantes')
+var userRouter = require('./routes/user')
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/', indexRouter);
 app.use('/admin/restaurantes', restaurantesRouter)
+app.use('/user', userRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

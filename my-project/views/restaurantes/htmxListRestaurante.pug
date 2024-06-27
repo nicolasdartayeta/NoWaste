@@ -3,8 +3,9 @@ if restaurantesList.length
     ul 
         each restaurante in restaurantesList
             li(id=restaurante.id)
-                a(hx-get='/admin/restaurantes/show/' + restaurante.id hx-target="#content" hx-push-url='true') #{restaurante.nombre}
-                button(hx-delete='/admin/restaurantes/show/'+restaurante.id hx-target='closest li' hx-swap="outerHTML" onclick=`checkContent(${restaurante.id})`) X
+                a(hx-get=`${baseURL}/show/` + restaurante.id hx-target="#content" hx-push-url='true') #{restaurante.nombre}
+                if baseURL == '/admin/restaurantes'
+                    button(hx-delete='/admin/restaurantes/show/'+restaurante.id hx-target='closest li' hx-swap="outerHTML" onclick=`checkContent(${restaurante.id})`) X
 else 
     p No hay restaurantes
 

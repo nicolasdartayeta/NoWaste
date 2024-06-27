@@ -15,12 +15,13 @@ div(id=datos._id)
                             each valor, atributo in producto
                                 if (atributo != 'imagenesProducto')
                                     p #{atributo}: #{valor}
-                                        if (atributo == 'nombre')
-                                            button(hx-get=baseURL+'/'+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") 
-                                                img(src="/static/icons/edit.png" alt="edit")
-                                            button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+valor hx-target="closest li" hx-swap='outerHTML') 
-                                                img(src="/static/icons/trash.png" alt="delete")
-                                        //prodcuto tiene _id???
+                                        if baseURL == '/admin/restaurantes'
+                                            if (atributo == 'nombre')
+                                                button(hx-get=baseURL+'/'+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") 
+                                                    img(src="/static/icons/edit.png" alt="edit")
+                                                button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+valor hx-target="closest li" hx-swap='outerHTML') 
+                                                    img(src="/static/icons/trash.png" alt="delete")
+                                            //prodcuto tiene _id???
                                 else  
                                     .slider
                                         button#btn-derecha
@@ -37,5 +38,5 @@ div(id=datos._id)
                 p Este restaurante no tiene productos
     else 
         p No hay datos
-
-    button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content") Agregar Producto
+    if baseURL == '/admin/restaurantes'
+        button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content") Agregar Producto

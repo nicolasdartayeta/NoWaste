@@ -1,4 +1,5 @@
 @import url('styleRestaurante.css');
+@import url('styleUser.css');
 :root {
   --color-primary: #3273dc;
   --color-secondary: #23d160;
