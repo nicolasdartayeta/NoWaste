@@ -1,25 +1,25 @@
 p= "Productos"
 if restaurantesList.length 
     ul 
-        each restaurante in restaurantesList
-                ul.listaProductosUser(style="margin-top: 20px;")
-                    each producto in restaurante.producto
-                        ul.producto
-                            p Local: #{restaurante.nombre}
-                            each valor, atributo in producto
-                                if (atributo == 'imagenesProducto')
-                                    .slider
-                                            button#btn-derecha
-                                                img(src="/static/icons/arrow_right.png" alt=">")
-                                            button#btn-izquierda() 
-                                                img(src="/static/icons/arrow_left.png" alt="<")
-                                            .slides
-                                                    each imagen in valor
-                                                        .slide
-                                                            #contenedor-img
-                                                                img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
-                                else
-                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion')
-                                        p #{atributo}: #{valor}
+        ul.listaProductosUser(style="margin-top: 20px;")
+            each restaurante in restaurantesList
+                        each producto in restaurante.producto
+                            ul.producto
+                                p Local: #{restaurante.nombre}
+                                each valor, atributo in producto
+                                    if (atributo == 'imagenesProducto')
+                                        .slider
+                                                button#btn-derecha
+                                                    img(src="/static/icons/arrow_right.png" alt=">")
+                                                button#btn-izquierda() 
+                                                    img(src="/static/icons/arrow_left.png" alt="<")
+                                                .slides
+                                                        each imagen in valor
+                                                            .slide
+                                                                #contenedor-img
+                                                                    img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
+                                    else
+                                        if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion')
+                                            p #{atributo}: #{valor}
 else                                
     p No hay productos disponibles
