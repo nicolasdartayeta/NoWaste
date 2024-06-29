@@ -57,6 +57,18 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
   }
 });
 
+exports.listado_productos = asyncHandler(async (req, res, next) => {
+  const restaurantes = await restauranteModel.find().exec();
+  var template
+  if (req.headers['hx-request']) {
+    template = 'usuarios/htmxListProductos'
+  } else {
+    template = 'usuarios/usuariosHome'//ERROR
+  }  
+  res.render(template, {baseURL: baseURL, restaurantesList: restaurantes})
+});
+
+
 /*
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {

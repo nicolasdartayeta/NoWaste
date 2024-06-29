@@ -1,5 +1,8 @@
 div(id=datos._id)
     h2= nombre
+    //URl DE USER
+    if baseURL == '/user'
+        button(hx-get=baseURL+"/listadoProductos"  hx-target="#content") volver
     if datos.imagen 
         img(src='/static/images/'+datos._id+'.jpg')
     if datos.length != 0

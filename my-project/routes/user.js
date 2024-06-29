@@ -12,4 +12,7 @@ router.route('/')
 router.route('/show/:restauranteId')
   .get(userController.restaurante_list)
 
+router.route('/listadoProductos')
+  .get(userController.listado_productos)
+  
 module.exports = router;
