@@ -6,8 +6,11 @@ html
     script(src="https://unpkg.com/htmx.org@1.8.4")
     script.
       function checkContent(restauranteId) {
-        document.getElementById('restauranteId').remove()
-        console.log(restauranteId)
+        //document.getElementById(restauranteId).remove();
+        document.getElementById('content').innerHTML = "<p>Restaurante eliminado !!</p>"
+      }
+      function limpiarContent() {
+        document.getElementById('content').innerHTML = "<p>Elegi un restaurante!</p>"
       }
     script.
       document.addEventListener("DOMContentLoaded", () => {

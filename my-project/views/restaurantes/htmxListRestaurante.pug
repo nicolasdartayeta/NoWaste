@@ -5,7 +5,7 @@ if restaurantesList.length
             li(id=restaurante.id)
                 a(hx-get=`${baseURL}/show/` + restaurante.id hx-target="#content" hx-push-url='true') #{restaurante.nombre}
                 if baseURL == '/admin/restaurantes'
-                    button(hx-delete='/admin/restaurantes/show/'+restaurante.id hx-target='closest li' hx-swap="outerHTML" onclick=`checkContent(${restaurante.id})`) X
+                    button(hx-delete='/admin/restaurantes/show/'+restaurante.id hx-target='closest li' hx-swap='outerHTML' onclick='checkContent("'+restaurante.id+'")') X
 else 
     p No hay restaurantes
 

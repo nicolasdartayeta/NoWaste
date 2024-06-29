@@ -1,11 +1,5 @@
 extends ../layout
 
-block head 
-  script. 
-    function limpiarContent() {
-      document.getElementById('content').innerHTML = "<p>Elegi un restaurante!</p>"
-    }
-
 block sidebar
   p Restaurantes
   button(hx-get=baseURL+"/add" hx-target="#content" hx-push-url='true') Add restaurante

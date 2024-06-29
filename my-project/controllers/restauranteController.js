@@ -29,6 +29,7 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
     } else {
       template = 'restaurantes/listRestaurantes'
     }  
+    console.log("lsitadrodso")
     res.render(template, {baseURL: baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes})
   });
 
@@ -230,8 +231,7 @@ exports.restaurante_delete = asyncHandler(async (req, res, next) => {
   const restauranteIdURL = partesURL[partesURL.length - 1];
 
   if (req.params.restauranteId === restauranteIdURL){
-    console.log(restauranteIdURL);
-    res.redirect(303,baseURL+'/show');
+    res.status(200).send();
   }else{
     res.status(200).send();
   }
