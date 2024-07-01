@@ -1,9 +1,9 @@
 h1 Login
-    form(action="", method="post") 
+    form(action="/login", method="post") 
         div.form-group
-            label(for='username') Usuario:
-            input#nombre.form-control(type='text', placeholder='Usuario' name='Usuario' required)
-            label(for='Contraseña') Contraseña:
-            input#nombre.form-control(type='text', placeholder='Contraseña' name='contraseña' required)
+            label(for='email') Usuario:
+            input#nombre.form-control(type='text', placeholder='Ingrese e-mail' name='email' required)
+            label(for='password') Contraseña:
+            input#nombre.form-control(type='password', placeholder='Ingrese Contraseña' name='password' required)
         button.btn.btn-primary(type='submit' hx-post="" hx-target="#content") Iniciar sesion
         
