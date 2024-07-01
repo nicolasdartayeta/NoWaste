@@ -2,7 +2,7 @@ doctype html
 html
   head
     title NoWaste
-    link(rel='stylesheet', href='/static/stylesheets/style.css')
+    link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
     script(src="https://unpkg.com/htmx.org@1.8.4")
     script.
       function checkContent(restauranteId) {
@@ -40,11 +40,18 @@ html
       });
     block head
   body
-    
-    header 
-      a(href='/')
-        h1 NoWaste
-    section#sidebar
-      block sidebar
-    section#content 
-      block content 
+    div(class='flex flex-col h-screen w-screen overflow-hidden')
+      header
+        div(class='bg-green-900 mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-12 lg:px-8')
+          div(class='sm:flex sm:items-center sm:justify-between')
+            div(class='text-center sm:text-left')
+              a(href='/')
+                h1(class='text-2xl font-bold text-gray-900 sm:text-3xl') NoWaste
+      
+      div(class='flex h-full w-screen flex-row')
+        div(class='bg-green-900/30 flex h-full w-80 flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
+          div(id='sidebar')
+            block sidebar
+
+        div(id='content' class='bg-green-900/10 flex h-full w-screen flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
+          block content 

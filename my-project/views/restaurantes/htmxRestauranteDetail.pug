@@ -1,22 +1,22 @@
 div(id=datos._id)
-    h2= nombre
-    //URl DE USER
+    // URl DE USER
     if baseURL == '/user'
-        button(hx-get=baseURL+"/listadoProductos"  hx-target="#content") volver
-    if datos.imagen 
-        img(src='/static/images/'+datos._id+'.jpg')
+        button(hx-get=baseURL+"/listadoProductos"  hx-target="#content" class='w-52 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white') volver
+    
+    h2(class='text-2xl font-bold leading-9 tracking-tight text-gray-900')= nombre
+
     if datos.length != 0
-        ul 
+        ul(class=' space-y-2') 
             each dato, atributo in datos
-                if (atributo != 'imagen')
+                if (atributo != 'imagen' && atributo != '_id' && atributo != '__v' && atributo != 'producto')
                     li #{atributo}: #{dato}
             if (datos.producto.length != 0)
-                h3 Productos
-                ul.listaProductos(style="margin-top: 20px;")
+                p(class='text-lg font-bold leading-9 tracking-tight text-gray-800') Productos
+                ul.listaProductos
                     each producto in datos.producto
                         li.producto
                             each valor, atributo in producto
-                                if (atributo != 'imagenesProducto')
+                                if (atributo != 'imagenesProducto' && atributo != '_id')
                                     p #{atributo}: #{valor}
                                         if baseURL == '/admin/restaurantes'
                                             if (atributo == 'nombre')
@@ -24,8 +24,7 @@ div(id=datos._id)
                                                     img(src="/static/icons/edit.png" alt="edit")
                                                 button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+valor hx-target="closest li" hx-swap='outerHTML') 
                                                     img(src="/static/icons/trash.png" alt="delete")
-                                            //prodcuto tiene _id???
-                                else  
+                                else if (atributo != '_id')  
                                     .slider
                                         button#btn-derecha
                                             img(src="/static/icons/arrow_right.png" alt=">")
@@ -42,4 +41,4 @@ div(id=datos._id)
     else 
         p No hay datos
     if baseURL == '/admin/restaurantes'
-        button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content") Agregar Producto
+        button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content" class='w-60 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white') Agregar Producto

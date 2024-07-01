@@ -1,14 +1,48 @@
-h1 Agregar restaurante
-div(id="formNewRestaurante")
-  form(action="/admin/restaurantes/add", method="post") 
-    div.form-group
-      label(for='nombre') Nombre:
-      input#nombre.form-control(type='text', placeholder='Nombre' name='nombre' required)
-      label(for='calle') Calle:
-      input#nombre.form-control(type='text', placeholder='Calle' name='calle' required)
-      label(for='numero') Numero:
-      input#nombre.form-control(type='text', placeholder='Numero' name='numero' required)
-    button.btn.btn-primary(type='submit' hx-post="/admin/restaurantes/add" hx-target="#content") Add restaurante
+div(class='flex items-center justify-center')
+  form(
+    id='formNewRestaurante'
+    action="/admin/restaurantes/add"
+    method="post"
+    class="mt-8 grid grid-cols-6 gap-6")
+    div(class="col-span-6")
+      label(
+        for="nombre"
+        class="block text-sm font-medium text-gray-700") Nombre del restaurante:
+      input(
+        type="text"
+        placeholder='Nombre'
+        name='nombre'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="calle"
+        class="block text-sm font-medium text-gray-700") Calle:
+      input(
+        type="text"
+        placeholder='Calle'
+        name='calle'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="numero"
+        class="block text-sm font-medium text-gray-700") Numero:
+      input(
+        type="text"
+        placeholder='Numero'
+        name='numero'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+    
+    div(class="col-span-6 sm:flex sm:items-center sm:gap-4")
+      button(
+        type='submit'
+        hx-post="/admin/restaurantes/add"
+        hx-target="#content"
+        class="w-full inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white") Agregar restaurante
 
 if errors
   ul
