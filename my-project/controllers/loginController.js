@@ -7,7 +7,6 @@ exports.signIn = passport.authenticate('local',{ //Uso estrategia definida en pa
   failureRedirect: '/login'
 })
 
-
 exports.signUp = asyncHandler(async (req, res, next) => {
   const {email,username,password,confirm_password} = req.body;
   if (password != confirm_password){
@@ -23,4 +22,13 @@ exports.signUp = asyncHandler(async (req, res, next) => {
       res.redirect('/login')
     }
   }
+})
+
+exports.logOut = asyncHandler(async (req, res, next) => {
+  req.logout(function(err) {
+    if (err) {
+        return next(err);
+    }
+    res.redirect('/login');
+});
 })

@@ -14,4 +14,7 @@ router.route('/register')
   })
   .post(loginController.signUp)
 
+router.route('/logout')
+  .get(loginController.logOut)
+
 module.exports = router
