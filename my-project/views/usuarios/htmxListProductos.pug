@@ -22,7 +22,8 @@ div(class='flex flex-col items-center justify-center p-4 w-full')
                                                     #contenedor-img
                                                         img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
                                 else
-                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'fecha_caducacion') || (atributo == 'stock')
+                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'stock')
                                         p #{atributo}: #{valor}
+                            button(class='inline-block rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white') Comprar
     else                                
         p No hay productos disponibles
