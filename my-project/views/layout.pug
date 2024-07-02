@@ -40,7 +40,7 @@ html
       });
     block head
   body
-    div(class='flex flex-col h-screen w-screen overflow-hidden')
+    div(class='flex flex-col h-screen w-screen overflow-auto')
       header
         div(class='bg-green-900 mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-12 lg:px-8')
           div(class='sm:flex sm:items-center sm:justify-between')
@@ -48,10 +48,10 @@ html
               a(href='/')
                 h1(class='text-2xl font-bold text-gray-900 sm:text-3xl') NoWaste
       
-      div(class='flex h-full w-screen flex-row')
+      div(class='flex h-full w-full flex-row')
         div(class='bg-green-900/30 flex h-full w-80 flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
           div(id='sidebar')
             block sidebar
 
-        div(id='content' class='bg-green-900/10 flex h-full w-screen flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
+        div(id='content' class='bg-green-900/10 flex h-full w-screen flex-col justify-between border-e px-4 py-6 overflow-auto')
           block content 
