@@ -6,6 +6,7 @@
     "start": "npm install; nodemon ./bin/www"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "connect-sqlite3": "^0.9.15",
     "cookie-parser": "~1.4.4",
