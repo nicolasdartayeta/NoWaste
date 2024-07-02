@@ -1,0 +1,12 @@
+h1 Register
+    form(action="/login/register", method="post") 
+        div.form-group
+            label(for='email') Email:
+            input#nombre.form-control(type='email',pattern= "[^ @]*@[^ @]*", placeholder='Ingrese e-mail' name='email' required)
+            label(for='username') Usuario:
+            input#nombre.form-control(type='text', placeholder='Ingrese Usuario' name='username' required)
+            label(for='password') Contraseña:
+            input#nombre.form-control(type='password', placeholder='Ingrese Contraseña' name='password' required)
+            label(for='password') Confirmar Contraseña:
+            input#nombre.form-control(type='password', placeholder='Ingrese Contraseña' name='confirm_password' required)
+        button.btn.btn-primary(type='submit' hx-post="" hx-target="#content") Registrar

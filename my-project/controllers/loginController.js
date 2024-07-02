@@ -1,30 +1,26 @@
-const asyncHandler = require("express-async-handler");
-const usuarioModel = require('../models/usuario');
+const asyncHandler = require('express-async-handler')
+const usuarioModel = require('../models/usuario')
+const passport = require('passport')
 
-var passport = require('passport');
-var LocalStrategy = require('passport-local');
-var crypto = require('crypto');
+exports.signIn = passport.authenticate('local',{ //Uso estrategia definida en passport.js
+  successRedirect: '/user',
+  failureRedirect: '/login'
+})
 
-passport.use(new LocalStrategy(async function verify(username, password, cb) {
-    var usuario = await usuarioModel.findOne({username: username}).exec()
 
-    if (usuario) {
-        crypto.pbkdf2(password, usuario.salt, 310000, 32, 'sha256', function(err, hashedPassword) {
-            if (err) { return cb(err); }
-            if (!crypto.timingSafeEqual(usuario.hashed_password, hashedPassword)) {
-              return cb(null, false, { message: 'Incorrect password.' });
-            }
-            return cb(null, usuario);
-          });
+exports.signUp = asyncHandler(async (req, res, next) => {
+  const {email,username,password,confirm_password} = req.body;
+  if (password != confirm_password){
+    res.send('Las contraseñas no coinciden')
+  } else{
+    const emailUsuario = await usuarioModel.findOne({email: email})
+    if (emailUsuario) {
+      res.send('Email ya esta en uso')
     } else {
-        console.log('No hay un usuario con ese nombre')
-        return cb(null, false, { message: 'Incorrect username.' })
+      const nuevoUsuario = new usuarioModel({email,username,password})
+      nuevoUsuario.password = await nuevoUsuario.encriptar(password)
+      await nuevoUsuario.save()
+      res.redirect('/login')
     }
-  }));
-
-exports.authenticate = asyncHandler( async (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/success',
-        failureRedirect: '/login',
-    });
+  }
 })

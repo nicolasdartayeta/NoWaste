@@ -1,97 +1,92 @@
-const asyncHandler = require("express-async-handler");
-const restauranteModel = require('../models/restaurante');
-const { unlink } = require('node:fs/promises');
+const asyncHandler = require('express-async-handler')
+const restauranteModel = require('../models/restaurante')
+const { unlink } = require('node:fs/promises')
 
-const multer  = require('multer')
+const multer = require('multer')
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {         //CHECK SI ESTA LA CARPETA O NO
+  destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
     cb(null, './public/images')
   },
-  
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     cb(null, file.fieldname + '-' + uniqueSuffix + '.jpg')
   }
 })
-
 const baseURL = '/admin/restaurantes'
 
-exports.imageUploader = multer({ storage: storage})
+exports.imageUploader = multer({ storage })
 
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
-    const restaurantes = await restauranteModel.find().exec();
+  const restaurantes = await restauranteModel.find().exec()
 
-    var template
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxListRestaurante'
-    } else {
-      template = 'restaurantes/listRestaurantes'
-    }  
-    console.log("lsitadrodso")
-    res.render(template, {baseURL: baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes})
-  });
+  let template
+  if (req.headers['hx-request']) {
+    template = 'restaurantes/htmxListRestaurante'
+  } else {
+    template = 'restaurantes/listRestaurantes'
+  }
+  console.log('lsitadrodso')
+  res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes })
+})
 
 // ACTUALIZADO
 exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
-  var template
-  var parametros = {}
+  let template
+  const parametros = {}
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddRestaurante'
   } else {
     template = 'restaurantes/restaurantesHome'
-    parametros['action'] = 'add'
+    parametros.action = 'add'
   }
-  parametros['baseURL'] = baseURL
+  parametros.baseURL = baseURL
 
   res.render(template, parametros)
-});
-  
+})
+
 // Handle Restaurante create on POST.
 exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
-
-  const { nombre, calle, numero } = req.body;
-
+  const { nombre, calle, numero } = req.body
 
   if (!nombre || !calle || !numero) {
-      return res.status(400).json({ error: 'All fields are required.' });
+    return res.status(400).json({ error: 'All fields are required.' })
   }
 
-  const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero });
+  const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero })
 
-  const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec();
+  const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec()
   if (restauranteExists) {
-    res.send('ERROR al agregar restaurante');
+    res.send('ERROR al agregar restaurante')
+  } else {
+    await restaurante.save()
+    res.render('restaurantes/restauranteAgregado')
   }
-  else {
-    await restaurante.save();
-    res.render('restaurantes/restauranteAgregado');
-    }
- });
+})
 
- // ACTUALIZADO
+// ACTUALIZADO
 exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
-  
+
   if (restaurante) {
     const nombreRestaurante = restaurante.nombre
-    const restaurantes = await restauranteModel.find().exec();
-  
-    var template
-    var parametros = {baseURL: baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante}
+    const restaurantes = await restauranteModel.find().exec()
+
+    let template
+    const parametros = { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
       template = 'restaurantes/restauranteDetail'
     }
-  
+
     res.render(template, parametros)
   } else {
-    res.redirect(baseURL+'/show')
+    res.redirect(baseURL + '/show')
   }
-});
+})
 
 // ACTUALIZADO
 exports.add_product = asyncHandler(async (req, res, next) => {
@@ -99,46 +94,46 @@ exports.add_product = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(restauranteId).lean()
   const nombreRestaurante = restaurante.nombre
 
-  var template
-  var parametros = {baseURL: baseURL, nombre: nombreRestaurante, restauranteId: restauranteId, datos: restaurante}
+  let template
+  const parametros = { baseURL, nombre: nombreRestaurante, restauranteId, datos: restaurante }
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddProduct'
   } else {
     res.redirect(`${baseURL}/show/${restauranteId}`)
   }
-  
+
   res.render(template, parametros)
-});
+})
 
 exports.add_product_post = asyncHandler(async (req, res, next) => {
-  const restaurante = await restauranteModel.findById(req.body.id).exec();
+  const restaurante = await restauranteModel.findById(req.body.id).exec()
 
   if (restaurante) {
-    const existeProduct = restaurante.producto.find(producto => producto.nombre === req.body.nombreProducto);
+    const existeProduct = restaurante.producto.find(producto => producto.nombre === req.body.nombreProducto)
 
     if (existeProduct) {
-      res.send('ERROR: El producto ya existe en este restaurante');
+      res.send('ERROR: El producto ya existe en este restaurante')
     } else {
-      const imagenes = req.files.map(file => ({id: file.filename}))
+      const imagenes = req.files.map(file => ({ id: file.filename }))
       const nuevoProducto = {
         nombre: req.body.nombreProducto,
         descripcion: req.body.descripcion,
         precio: req.body.precio,
-        imagenesProducto: imagenes,
-      };
-       
+        imagenesProducto: imagenes
+      }
+
       // Añade el nuevo producto a la lista de productos del restaurante.
-      restaurante.producto.push(nuevoProducto);
+      restaurante.producto.push(nuevoProducto)
 
       // Guarda el restaurante actualizado en la base de datos.
-      await restaurante.save();
-      res.redirect(`${baseURL}/show/${req.body.id}`);
+      await restaurante.save()
+      res.redirect(`${baseURL}/show/${req.body.id}`)
     }
   } else {
-    res.send('ERROR al agregar restaurante');
+    res.send('ERROR al agregar restaurante')
   }
-});
+})
 
 exports.edit_product = asyncHandler(async (req, res, next) => {
   const restauranteId = req.params.restauranteId
@@ -147,92 +142,91 @@ exports.edit_product = asyncHandler(async (req, res, next) => {
   const nombreProducto = req.query.nombreProducto
   const producto = restaurante.producto.find(producto => producto.nombre == nombreProducto)
 
-  var template
-  var parametros = {baseURL: baseURL, nombre: nombreRestaurante, restauranteId: restauranteId, datos: restaurante, producto: producto}
+  let template
+  const parametros = { baseURL, nombre: nombreRestaurante, restauranteId, datos: restaurante, producto }
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxEditProduct'
   } else {
     res.redirect(`${baseURL}/show/${restauranteId}`)
   }
-  
+
   res.render(template, parametros)
-});
+})
 
 exports.edit_product_post = asyncHandler(async (req, res, next) => {
-  const restaurante = await restauranteModel.findById(req.body.id).exec();
+  const restaurante = await restauranteModel.findById(req.body.id).exec()
 
   if (restaurante) {
-    const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.body.nombreAnterior);
+    const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.body.nombreAnterior)
     // Actualizar los datos del producto
-    restaurante.producto[productoIndex].nombre = req.body.nombreProducto;
-    restaurante.producto[productoIndex].descripcion = req.body.descripcion;
-    restaurante.producto[productoIndex].precio = req.body.precio;
+    restaurante.producto[productoIndex].nombre = req.body.nombreProducto
+    restaurante.producto[productoIndex].descripcion = req.body.descripcion
+    restaurante.producto[productoIndex].precio = req.body.precio
 
-    await restaurante.save();
-    res.redirect(`${baseURL}/show/${req.body.id}`);
+    await restaurante.save()
+    res.redirect(`${baseURL}/show/${req.body.id}`)
   } else {
-    res.send('ERROR al agregar restaurante');
+    res.send('ERROR al agregar restaurante')
   }
-});
+})
 
 exports.delete_producto = asyncHandler(async (req, res, next) => {
-  const restaurante = await restauranteModel.findById(req.params.restauranteId).exec();
-  const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.params.nombreProducto);
-  
-  for (imagen of restaurante.producto[productoIndex].imagenesProducto){
+  const restaurante = await restauranteModel.findById(req.params.restauranteId).exec()
+  const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.params.nombreProducto)
+
+  for (imagen of restaurante.producto[productoIndex].imagenesProducto) {
     try {
-        await unlink(`./public/images/${imagen.id}`);
-        console.log(`Imagen ${imagenId} eliminada exitosamente.`);
-        // res.redirect(`${baseURL}/show/${req.params.restauranteId}`)
+      await unlink(`./public/images/${imagen.id}`)
+      console.log(`Imagen ${imagenId} eliminada exitosamente.`)
+      // res.redirect(`${baseURL}/show/${req.params.restauranteId}`)
     } catch (error) {
-        if (error.code === 'ENOENT') {
-            console.error(`La imagen con id ${imagen.id} no se encontró.`);
-        } else {
-            console.error(`Error al intentar eliminar la imagen: ${error.message}`);
-        }
+      if (error.code === 'ENOENT') {
+        console.error(`La imagen con id ${imagen.id} no se encontró.`)
+      } else {
+        console.error(`Error al intentar eliminar la imagen: ${error.message}`)
+      }
     }
   }
   // Elimina el producto del arreglo producto del restaurante
-  restaurante.producto.splice(productoIndex, 1);
+  restaurante.producto.splice(productoIndex, 1)
   // Guarda los cambios en la base de datos
-  try{
-    await restaurante.save();
-  } catch(error){
-    console.error(error);
+  try {
+    await restaurante.save()
+  } catch (error) {
+    console.error(error)
   };
-  res.status(200).send();
-});
-
+  res.status(200).send()
+})
 
 exports.restaurante_delete = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
   for (producto of restaurante.producto) {
-    for (imagen of producto.imagenesProducto){
+    for (imagen of producto.imagenesProducto) {
       try {
-          await unlink(`./public/images/${imagenId}`);
-          console.log(`Imagen ${imagenId} eliminada exitosamente.`);
+        await unlink(`./public/images/${imagenId}`)
+        console.log(`Imagen ${imagenId} eliminada exitosamente.`)
       } catch (error) {
-          if (error.code === 'ENOENT') {
-              console.error(`La imagen con id ${imagenId} no se encontró.`);
-          } else {
-              console.error(`Error al intentar eliminar la imagen: ${error.message}`);
-          }
-      } //TRY AND CATCH
+        if (error.code === 'ENOENT') {
+          console.error(`La imagen con id ${imagenId} no se encontró.`)
+        } else {
+          console.error(`Error al intentar eliminar la imagen: ${error.message}`)
+        }
+      } // TRY AND CATCH
     }
   };
 
-  const response = await restauranteModel.deleteOne({_id: req.params.restauranteId}).exec();
- 
-  const urlActual = req.get('HX-Current-URL');
-  console.log(urlActual);
+  const response = await restauranteModel.deleteOne({ _id: req.params.restauranteId }).exec()
 
-  const partesURL = urlActual.split('/');
-  const restauranteIdURL = partesURL[partesURL.length - 1];
+  const urlActual = req.get('HX-Current-URL')
+  console.log('ju')
 
-  if (req.params.restauranteId === restauranteIdURL){
-    res.status(200).send();
-  }else{
-    res.status(200).send();
+  const partesURL = urlActual.split('/')
+  const restauranteIdURL = partesURL[partesURL.length - 1]
+
+  if (req.params.restauranteId === restauranteIdURL) {
+    res.status(200).send()
+  } else {
+    res.status(200).send()
   }
-});
+})
