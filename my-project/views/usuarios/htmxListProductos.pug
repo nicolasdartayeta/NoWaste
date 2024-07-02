@@ -22,7 +22,7 @@ div(class='flex flex-col items-center justify-center p-4 w-full')
                                                     #contenedor-img
                                                         img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
                                 else
-                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion')
+                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'fecha_caducacion') || (atributo == 'stock')
                                         p #{atributo}: #{valor}
     else                                
         p No hay productos disponibles

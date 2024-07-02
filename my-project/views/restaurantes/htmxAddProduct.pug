@@ -41,6 +41,28 @@ div(class='flex flex-col items-center justify-center')
 
     div(class="col-span-6 sm:col-span-3")
       label(
+        for="fecha"
+        class="block text-sm font-medium text-gray-700") Fecha Caducacion:
+      input(
+        type="text"
+        placeholder='Fecha Caducacion'
+        name='fecha'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+    
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="stock"
+        class="block text-sm font-medium text-gray-700") Cantidad Disponible:
+      input(
+        type="text"
+        placeholder='Cantidad Disponible'
+        name='stock'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+
+    div(class="col-span-6 sm:col-span-3")
+      label(
         for="imagenProducto"
         class="block text-sm font-medium text-gray-700") Imagen del producto:
       input(

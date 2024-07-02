@@ -120,6 +120,8 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
         nombre: req.body.nombreProducto,
         descripcion: req.body.descripcion,
         precio: req.body.precio,
+        fecha_caducacion: req.body.fecha_caducacion,
+        stock: req.body.stock,
         imagenesProducto: imagenes
       }
 
@@ -163,6 +165,9 @@ exports.edit_product_post = asyncHandler(async (req, res, next) => {
     restaurante.producto[productoIndex].nombre = req.body.nombreProducto
     restaurante.producto[productoIndex].descripcion = req.body.descripcion
     restaurante.producto[productoIndex].precio = req.body.precio
+    restaurante.producto[productoIndex].fecha_caducacion = req.body.fecha_caducacion
+    restaurante.producto[productoIndex].stock = req.body.stock
+
 
     await restaurante.save()
     res.redirect(`${baseURL}/show/${req.body.id}`)
