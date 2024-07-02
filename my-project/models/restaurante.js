@@ -12,6 +12,14 @@ const restauranteSchema = new Schema({
                 nombre: String,
                 descripcion: String,
                 precio: Number,
+                fecha_caducacion: Date,
+                stock: {
+                  type: Number,
+                  validate: {
+                    validator: Number.isInteger,
+                    message: '{VALUE} La cantidad debe ser un numero entero'
+                  }
+                },
                 imagenesProducto: [{
                   id: String, 
                 }]
