@@ -32,3 +32,9 @@ exports.logOut = asyncHandler(async (req, res, next) => {
     res.redirect('/login');
 });
 })
+
+exports.signInWithFacebook = passport.authenticate('facebook');
+exports.signInWithFacebookCallback = passport.authenticate('facebook', {
+  failureRedirect: '/login',
+  successRedirect: '/user'
+});

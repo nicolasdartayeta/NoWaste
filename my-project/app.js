@@ -13,6 +13,7 @@ const userRouter = require('./routes/user')
 const loginRouter = require('./routes/login')
 const passport = require('passport')
 const session = require('express-session')
+require('dotenv').config();
 
 
 const app = express()

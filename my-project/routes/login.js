@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const loginController = require('../controllers/loginController')
+const passport = require('passport');
 
 router.route('/')
   .get(function (req, res, next) {
@@ -16,5 +17,8 @@ router.route('/register')
 
 router.route('/logout')
   .get(loginController.logOut)
+
+router.get('/auth/facebook', loginController.signInWithFacebook)
+router.get('/auth/facebook/callback', loginController.signInWithFacebookCallback)
 
 module.exports = router
