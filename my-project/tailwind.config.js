@@ -6,7 +6,8 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('@tailwindcss/forms'),
+    
   ],
 }
 
+// npx tailwindcss -i ./public/stylesheets/baseTailwind.css -o ./public/stylesheets/baseTailwind.css --watch

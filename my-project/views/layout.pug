@@ -40,7 +40,7 @@ html
       });
     block head
   body
-    div(class='flex flex-col h-screen w-screen overflow-hidden')
+    div(class='flex flex-col h-screen w-screen overflow-auto')
       header
         div(class='bg-green-900 mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-12 lg:px-8')
           div(class='sm:flex sm:items-center sm:justify-between')
@@ -51,10 +51,10 @@ html
               onclick= "window.location.href='/login/logout'",
               class='float-right w-16 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white') Log Out
       
-      div(class='flex h-full w-screen flex-row')
+      div(class='flex h-full w-full flex-row')
         div(class='bg-green-900/30 flex h-full w-80 flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
           div(id='sidebar')
             block sidebar
 
-        div(id='content' class='bg-green-900/10 flex h-full w-screen flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
+        div(id='content' class='bg-green-900/10 flex h-full w-screen flex-col justify-between border-e px-4 py-6 overflow-auto')
           block content 
