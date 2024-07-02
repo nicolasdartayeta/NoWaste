@@ -6,7 +6,7 @@ div(class='flex flex-col items-center justify-center p-4 w-full')
             //- ul.listaProductosUser(style="margin-top: 20px;")
             each restaurante in restaurantesList
                 each producto in restaurante.producto
-                    div(class='border-2 border-black')
+                    div
                         ul
                             p Local: #{restaurante.nombre}
                             each valor, atributo in producto
