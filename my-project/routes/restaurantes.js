@@ -3,10 +3,7 @@ var router = express.Router();
 
 var restauranteController = require('../controllers/restauranteController');
 const baseURL = '/admin/restaurantes'
-const isAuthenticated = require('../helpers/session');
 
-//middleware para la sesion
-router.use(isAuthenticated);
 
 /* home restuarate */
 router.route('/')
