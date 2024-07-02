@@ -14,4 +14,4 @@ module.exports = {
   ],
 }
 
-// npx tailwindcss -i ./public/stylesheets/baseTailwind.css -o ./public/stylesheets/baseTailwind.css --watch
+// npx tailwindcss -i ./public/stylesheets/baseTailwind.css -o ./public/stylesheets/outputTailwind.css --watch
