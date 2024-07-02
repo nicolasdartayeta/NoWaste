@@ -1,12 +1,25 @@
-h1 Register
-    form(action="/login/register", method="post") 
-        div.form-group
-            label(for='email') Email:
-            input#nombre.form-control(type='email',pattern= "[^ @]*@[^ @]*", placeholder='Ingrese e-mail' name='email' required)
-            label(for='username') Usuario:
-            input#nombre.form-control(type='text', placeholder='Ingrese Usuario' name='username' required)
-            label(for='password') Contraseña:
-            input#nombre.form-control(type='password', placeholder='Ingrese Contraseña' name='password' required)
-            label(for='password') Confirmar Contraseña:
-            input#nombre.form-control(type='password', placeholder='Ingrese Contraseña' name='confirm_password' required)
-        button.btn.btn-primary(type='submit' hx-post="" hx-target="#content") Registrar
+html
+  head
+    title Regist
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css")
+  body
+    h1 Registrar
+    .container
+      .row
+        .col-md-6.offset-md-3
+          form(action="/login/register", method="post")
+            .form-group
+              label(for='email') Email:
+              input#email.form-control(type='email', pattern="[^ @]*@[^ @]*", placeholder='Ingrese e-mail' name='email' required)
+            .form-group
+              label(for='username') Usuario:
+              input#username.form-control(type='text', placeholder='Ingrese Usuario' name='username' required)
+            .form-group
+              label(for='password') Contraseña:
+              input#password.form-control(type='password', placeholder='Ingrese Contraseña' name='password' required)
+            .form-group
+              label(for='confirm_password') Confirmar Contraseña:
+              input#confirm_password.form-control(type='password', placeholder='Ingrese Contraseña' name='confirm_password' required)
+            .form-group
+              button.btn.btn-primary(type='submit' hx-post="" hx-target="#content") Registrar
+              button.btn.btn-secondary(type='button', onclick="window.location.href='/login'") Volver a Login

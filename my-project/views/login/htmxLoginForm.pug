@@ -1,9 +1,19 @@
-h1 Login
-    form(action="/login", method="post") 
-        div.form-group
-            label(for='email') Usuario:
-            input#nombre.form-control(type='text', placeholder='Ingrese e-mail' name='email' required)
-            label(for='password') Contraseña:
-            input#nombre.form-control(type='password', placeholder='Ingrese Contraseña' name='password' required)
-        button.btn.btn-primary(type='submit' hx-post="" hx-target="#content") Iniciar sesion
-        
+html
+  head
+    title Login
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css")
+  body
+    h1 Login
+    .container
+      .row
+        .col-md-6.offset-md-3
+          form(action="/login", method="post")
+            .form-group
+              label(for='email') Usuario:
+              input#email.form-control(type='text', placeholder='Ingrese e-mail' name='email' required)
+            .form-group
+              label(for='password') Contraseña:
+              input#password.form-control(type='password', placeholder='Ingrese Contraseña' name='password' required)
+            .form-group
+              button.btn.btn-primary(type='submit' hx-post="" hx-target="#content") Iniciar sesión
+              button.btn.btn-secondary(type='button', onclick="window.location.href='/login/register'") Registrarse
