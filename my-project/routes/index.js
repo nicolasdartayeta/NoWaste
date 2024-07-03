@@ -8,12 +8,10 @@ router.route('/')
   .get(function(req, res, next) {
     const sidebar = new sidebarModel('Menu principal')
 
-    sidebar.addItem("Ver restaurantes", `${baseURL}/add`, `#content`)
-    sidebar.addItem("Ver modo usuario", `${baseURL}/show`, `#sidebar`)
+    sidebar.addItem("Menu restaurantes", `/admin/restaurantes`, `#sidebar`)
+    sidebar.addItem("Ver modo usuario", `/user`, `#content`)
 
-    // res.render('index', {title: 'NoWaste', sidebar: sidebar.sidebar})
-
-    res.render('index', { title: 'NoWaste'});
+    res.render('index', {title: 'NoWaste', sidebar: sidebar.sidebar})
   })
 
 module.exports = router;

@@ -25,7 +25,15 @@ exports.restaurante_home_get = asyncHandler(async (req, res, next) => {
   sidebar.addItem("Añadir restaurante", `${baseURL}/add`, `#content`)
   sidebar.addItem("Ver restaurantes", `${baseURL}/show`, `#sidebar`)
 
-  res.render('restaurantes/restaurantesHome', {sidebar: sidebar.sidebar})
+  let template
+  
+  if (req.headers['hx-request']) {
+    template = 'componentes/sidebarContent'
+  } else {
+    template = 'restaurantes/restaurantesHome'
+  }
+
+  res.render(template, {sidebar: sidebar.sidebar})
 })
 
 // ACTUALIZADO

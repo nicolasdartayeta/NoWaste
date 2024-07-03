@@ -24,6 +24,7 @@ exports.home = asyncHandler(async (req, res, next) => {
   let template
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxListRestaurante'
+    res.appendHeader('HX-Redirect', '/login')
   } else {
     template = 'usuarios/usuariosHome'
   }
