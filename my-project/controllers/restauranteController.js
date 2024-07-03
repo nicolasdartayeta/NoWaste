@@ -17,6 +17,17 @@ const baseURL = '/admin/restaurantes'
 
 exports.imageUploader = multer({ storage })
 
+const sidebarModel = require('../helpers/sidebar.js')
+
+exports.restaurante_home_get = asyncHandler(async (req, res, next) => {
+  const sidebar = new sidebarModel('Menu resturantes')
+
+  sidebar.addItem("Añadir restaurante", `${baseURL}/add`, `#content`)
+  sidebar.addItem("Ver restaurantes", `${baseURL}/show`, `#sidebar`)
+
+  res.render('restaurantes/restaurantesHome', {sidebar: sidebar.sidebar})
+})
+
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
   const restaurantes = await restauranteModel.find().exec()
