@@ -22,7 +22,15 @@ div(class='flex flex-col items-center justify-center p-4 w-full')
                                                     #contenedor-img
                                                         img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
                                 else
-                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'fecha_caducacion') || (atributo == 'stock')
+                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'stock')
                                         p #{atributo}: #{valor}
+                            //label(for=`cantidad-${producto._id}`) Cantidad:
+                            //input(type="number", id=`cantidad-${producto._id}`, name=`cantidad-${producto._id}`, min="1", max=producto.stock, value="1")
+                            //a(href=`/user/compra/${restaurante._id}/${producto._id}` class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar
+                            
+                            form(action=`/user/compra/${restaurante._id}/${producto._id}`, method="POST")
+                                label(for=`cantidad-${producto._id}`) Cantidad:
+                                input(type="number", id=`cantidad-${producto._id}`, name=`cantidad`, min="1", max=producto.stock, value="1")
+                                button(type="submit" class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar 
     else                                
         p No hay productos disponibles
