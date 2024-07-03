@@ -1,0 +1,44 @@
+div(id=datos._id)
+    // URl DE USER
+    if baseURL == '/user'
+        button(class='absolute bottom-5 right-5 rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen' hx-get=baseURL+"/listadoProductos"  hx-target="#content") volver
+    
+    p(class='text-2xl font-bold leading-9 tracking-tight text-gray-900')= nombre
+
+    if datos.length != 0
+        ul(class=' space-y-2') 
+            each dato, atributo in datos
+                if (atributo != 'imagen' && atributo != '_id' && atributo != '__v' && atributo != 'producto')
+                    li #{atributo}: #{dato}
+            if (datos.producto.length != 0)
+                p(class='text-lg font-bold leading-9 tracking-tight text-gray-800') Productos
+                ul.listaProductos
+                    each producto in datos.producto
+                        li.producto
+                            each valor, atributo in producto
+                                if (atributo != 'imagenesProducto' && atributo != '_id')
+                                    p #{atributo}: #{valor}
+                                        if baseURL == '/admin/restaurantes'
+                                            if (atributo == 'nombre')
+                                                button(hx-get=baseURL+'/'+datos._id+"/editProduct" hx-vals=`{"nombreProducto":"${valor}"}` hx-target="#content") 
+                                                    img(src="/static/icons/edit.png" alt="edit")
+                                                button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+valor hx-target="closest li" hx-swap='outerHTML') 
+                                                    img(src="/static/icons/trash.png" alt="delete")
+                                else if (atributo != '_id')  
+                                    .slider
+                                        button#btn-derecha
+                                            img(src="/static/icons/arrow_right.png" alt=">")
+                                        button#btn-izquierda() 
+                                            img(src="/static/icons/arrow_left.png" alt="<")
+                                        .slides
+                                                each imagen in valor
+                                                    .slide
+                                                        #contenedor-img
+                                                            img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
+                                                        
+            else 
+                p Este restaurante no tiene productos
+    else 
+        p No hay datos
+    if baseURL == '/admin/restaurantes'
+        button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content" class='w-60 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white') Agregar Producto

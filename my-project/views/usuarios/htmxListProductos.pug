@@ -1,0 +1,28 @@
+div(class='flex flex-col items-center justify-center p-4 w-full')    
+    p(class='text-2xl font-bold leading-9 tracking-tight text-gray-900') Productos
+    
+    if restaurantesList.length 
+        div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
+            //- ul.listaProductosUser(style="margin-top: 20px;")
+            each restaurante in restaurantesList
+                each producto in restaurante.producto
+                    div
+                        ul
+                            p Local: #{restaurante.nombre}
+                            each valor, atributo in producto
+                                if (atributo == 'imagenesProducto')
+                                    .slider
+                                        button#btn-derecha
+                                            img(src="/static/icons/arrow_right.png" alt=">")
+                                        button#btn-izquierda() 
+                                            img(src="/static/icons/arrow_left.png" alt="<")
+                                        .slides
+                                            each imagen in valor
+                                                .slide
+                                                    #contenedor-img
+                                                        img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
+                                else
+                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'fecha_caducacion') || (atributo == 'stock')
+                                        p #{atributo}: #{valor}
+    else                                
+        p No hay productos disponibles

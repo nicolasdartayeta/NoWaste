@@ -1,7 +1,62 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title NoWaste
+    link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
+    script(src="https://unpkg.com/htmx.org@1.8.4")
+    script.
+      function checkContent(restauranteId) {
+        //document.getElementById(restauranteId).remove();
+        document.getElementById('content').innerHTML = "<p>Restaurante eliminado !!</p>"
+      }
+      function limpiarContent() {
+        document.getElementById('content').innerHTML = "<p>Elegi un restaurante!</p>"
+      }
+    script.
+      document.addEventListener("DOMContentLoaded", () => {
+          const sliders = document.querySelectorAll ('.slider');
+          console.log(sliders);
+          sliders.forEach((slider, index) => {
+              const slides = slider.querySelector('.slides');
+              console.log(slider);
+              const slideCount = slides.childElementCount;
+              const btnIzquierda = slider.querySelector("#btn-izquierda");
+              console.log(btnIzquierda);
+              const btnDerecha = slider.querySelector("#btn-derecha");
+              let currentIndex = 0;
+              const slideWidth = slides.children[0].offsetWidth; // Ancho de cada diapositiva
+              const percentage = 100;
+              btnIzquierda.addEventListener("click", () => {
+                  currentIndex = (currentIndex > 0) ? currentIndex - 1 : slideCount - 1;
+                  const translateX = -currentIndex * slideWidth;
+                  slides.style.transform = `translateX(${translateX}px)`;
+              });
+
+              btnDerecha.addEventListener("click", () => {
+                  currentIndex = (currentIndex < slideCount - 1) ? currentIndex + 1 : 0;
+                  const translateX = -currentIndex * slideWidth;
+                  slides.style.transform = `translateX(${translateX}px)`;              });
+          });
+      });
+    block head
   body
-    block content
+    div(class='flex flex-col h-screen w-screen overflow-auto')
+      header
+        div(class='bg-customGray mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-12 lg:px-8 shadow-lg')
+          div(class='sm:flex sm:items-center sm:justify-between')
+            div
+              a(href='/')
+                img(src="/static/icons/logo.png", class="w-80 h-auto")
+            div(class='justify-center')
+              button(
+                onclick="window.location.href='/login/logout'",
+                class='inline-block rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white'
+              ) Log In/Out
+        
+      div(class='flex h-full w-full flex-row')
+        div(class='bg-green-900/30 flex h-full w-80 flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
+          div(id='sidebar')
+            block sidebar
+
+        div(id='content' class='bg-green-900/10 flex h-full w-full flex-col justify-between border-e px-4 py-6 overflow-auto')
+          block content 

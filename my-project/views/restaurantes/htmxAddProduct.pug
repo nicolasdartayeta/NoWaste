@@ -1,0 +1,86 @@
+div(class='flex flex-col items-center justify-center')
+  p(class='text-2xl font-bold leading-9 tracking-tight text-gray-900') Agregar Producto
+  form(
+    id='formNewRestaurante'
+    action="/admin/restaurantes/"+ restauranteId +"/addProduct"
+    method="post"
+    enctype="multipart/form-data"
+    class="mt-8 grid grid-cols-6 gap-6")
+    div(class="col-span-6")
+      label(
+        for="nombreProducto"
+        class="block text-sm font-medium text-gray-700") Nombre Del Producto:
+      input(
+        type="text"
+        placeholder='Nombre del producto'
+        name='nombreProducto'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="descripcion"
+        class="block text-sm font-medium text-gray-700") Descripcion:
+      input(
+        type="text"
+        placeholder='Descripcion'
+        name='descripcion'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="precio"
+        class="block text-sm font-medium text-gray-700") Precio:
+      input(
+        type="text"
+        placeholder='Precio'
+        name='precio'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="fecha"
+        class="block text-sm font-medium text-gray-700") Fecha Caducacion:
+      input(
+        type="text"
+        placeholder='Fecha Caducacion'
+        name='fecha'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+    
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="stock"
+        class="block text-sm font-medium text-gray-700") Cantidad Disponible:
+      input(
+        type="text"
+        placeholder='Cantidad Disponible'
+        name='stock'
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+
+    div(class="col-span-6 sm:col-span-3")
+      label(
+        for="imagenProducto"
+        class="block text-sm font-medium text-gray-700") Imagen del producto:
+      input(
+        type="file"
+        accept='image/jpg'
+        name='imagenProducto'
+        multiple
+        required
+        class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm")
+    
+    input(type='hidden', name='id', value= restauranteId)
+
+    div(class="col-span-6 sm:flex sm:items-center sm:gap-4")
+      button(
+        type='submit'
+        class="w-full inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white") Agregar producto
+
+if errors
+    ul
+        for error in errors
+            li!= error.msg

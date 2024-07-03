@@ -1,0 +1,18 @@
+extends ../layout
+
+block head 
+  script. 
+    function limpiarContent() {
+      document.getElementById('content').innerHTML = "<p>Elegi un restaurante!</p>"
+    }
+
+block sidebar
+  p Lista de restaurantes
+  input(class="w-full form-control" type="search" name="search" placeholder="Buscar por nombre" hx-post="/user" hx-trigger="input changed delay:500ms, search" hx-target="#search-results" hx-indicator=".htmx-indicator") 
+  div#search-results
+    include ../restaurantes/htmxListRestaurante.pug
+
+
+block content 
+  div
+    include htmxListProductos.pug
