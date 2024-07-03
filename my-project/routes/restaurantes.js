@@ -12,9 +12,7 @@ router.use(isSuperAdmin)
 
 /* home restuarate */
 router.route('/')
-  .get(function(req, res, next) {
-    res.render('restaurantes/restaurantesHome', { baseURL: baseURL})
-  })
+  .get(restauranteController.restaurante_home_get)
 
 router.route('/add')
   .get(restauranteController.restaurante_create_get)
