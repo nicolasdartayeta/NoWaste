@@ -1,8 +1,9 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
 const { unlink } = require('node:fs/promises')
-
+const http = require('http')
 const multer = require('multer')
+const sidebarHelper = require('../helpers/sidebar.js')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
@@ -20,14 +21,29 @@ const baseURL = '/user'
 exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
-  const restaurantes = await restauranteModel.find().exec()
-  let template
-  if (req.headers['hx-request']) {
-    template = 'restaurantes/htmxListRestaurante'
-  } else {
-    template = 'usuarios/usuariosHome'
+  const ip = String(req.connection.remoteAddress)
+  try{
+    if (!ip.startsWith('::ffff:')){         //condicion debido a tener hosteado en el docker local
+      data = await obtenerCiudad('ip')
+      req.session.city = data.city}
+    else{ req.session.city = 'Tandil'}
+
+    const restaurantes = await restauranteModel.find().exec()
+    let template
+    if (req.headers['hx-request']) {
+      template = 'restaurantes/htmxListRestaurante'
+    } else {
+      template = 'usuarios/usuariosHome'
+    }
+    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: req.session.city})
+  }catch (error) {
+    if (req.headers['hx-request']) {
+      template = 'restaurantes/htmxListRestaurante'
+    } else {
+      template = 'usuarios/usuariosHome'
+    }
+    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: 'Tandil'})
   }
-  res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes })
 })
 
 exports.busqueda = asyncHandler(async (req, res, next) => {
@@ -42,9 +58,8 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
   if (restaurante) {
     const nombreRestaurante = restaurante.nombre
     const restaurantes = await restauranteModel.find().exec()
-    console.log('arobvl')
     let template
-    const parametros = { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
+    const parametros = { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
@@ -65,7 +80,7 @@ exports.listado_productos = asyncHandler(async (req, res, next) => {
   } else {
     template = 'usuarios/usuariosHome'// ERROR
   }
-  res.render(template, { baseURL, restaurantesList: restaurantes })
+  res.render(template, { baseURL, restaurantesList: restaurantes, ciudad: req.session.city })
 })
 
 exports.comprar_producto = asyncHandler(async (req, res, next) => {
@@ -80,7 +95,6 @@ exports.comprar_producto = asyncHandler(async (req, res, next) => {
       if (cantidadCompra <= 0 || cantidadCompra > producto.stock) {
         return res.status(400).send('Cantidad inválida o supera el stock disponible');
       }
-      console.log(req.body.cantidad)
       producto.stock -= cantidadCompra;
       await restaurante.save()
       res.redirect(`/user`)       //luego al implementar el pago y demas cambiar esto
@@ -92,39 +106,38 @@ exports.comprar_producto = asyncHandler(async (req, res, next) => {
   }
 })
 
-/*
-// ACTUALIZADO
-exports.restaurante_list = asyncHandler(async (req, res, next) => {
-    const restaurantes = await restauranteModel.find().exec();
 
-    var template
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxListRestaurante'
-    } else {
-      template = 'restaurantes/listRestaurantes'
-    }
-    res.render(template, {baseURL: '/admin/restaurantes', title: 'Lista de restaurantes', restaurantesList: restaurantes})
+function obtenerCiudad(ip) {
+  return new Promise((resolve, reject) => {
+    // Opciones de la solicitud, construyendo la URL con la IP
+    const options = {
+      hostname: 'ip-api.com',
+      port: 80,
+      path: `/json/190.246.97.123`,
+      method: 'GET'
+    };
+
+    const req = http.request(options, (res) => {
+      let responseData = '';
+
+      res.on('data', (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on('end', () => {
+        try {
+          const parsedData = JSON.parse(responseData);
+          resolve(parsedData);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      reject(error);
+    });
+
+    req.end();
   });
-
- // ACTUALIZADO
-exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
-  const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
-
-  if (restaurante) {
-    const nombreRestaurante = restaurante.nombre
-    const restaurantes = await restauranteModel.find().exec();
-
-    var template
-    var parametros = {baseURL: '/admin/restaurantes', title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante}
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxRestauranteDetail'
-    } else {
-      template = 'restaurantes/restauranteDetail'
-    }
-
-    res.render(template, parametros)
-  } else {
-    res.redirect(baseURL+'/show')
-  }
-});
-*/
+}

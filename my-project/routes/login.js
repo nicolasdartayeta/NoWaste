@@ -5,6 +5,7 @@ const passport = require('passport');
 
 router.route('/')
   .get(function (req, res, next) {
+    res.appendHeader('HX-Redirect', '/login')
     res.render('login/htmxLoginForm')
   })
   .post(loginController.signIn)

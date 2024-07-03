@@ -3,13 +3,16 @@ var router = express.Router();
 
 var restauranteController = require('../controllers/restauranteController');
 const baseURL = '/admin/restaurantes'
+const isAuthenticated = require('../helpers/session');
+const isSuperAdmin = require('../helpers/isSuperAdmin')
 
+//middleware para la sesion
+router.use(isAuthenticated);
+router.use(isSuperAdmin)
 
 /* home restuarate */
 router.route('/')
-  .get(function(req, res, next) {
-    res.render('restaurantes/restaurantesHome', { baseURL: baseURL})
-  })
+  .get(restauranteController.restaurante_home_get)
 
 router.route('/add')
   .get(restauranteController.restaurante_create_get)

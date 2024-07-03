@@ -15,9 +15,11 @@ const passport = require('passport')
 const session = require('express-session')
 
 require('dotenv').config();
-
+require('./config/passport')
+const createRoles = require('./helpers/roleSetup');
 
 const app = express()
+createRoles()
 
 // Set up mongoose connection
 const mongoose = require('mongoose')
@@ -28,19 +30,18 @@ main().catch((err) => console.log(err))
 async function main () {
   await mongoose.connect(mongoDB)
 }
-require('./config/passport')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
+// middlewares
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser(''))
 app.use('/static', express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({ extended: true }))
-
 app.use(session({
   secret: 'keyboard cat',
   resave: true,
@@ -52,6 +53,7 @@ app.use('/', indexRouter)
 app.use('/admin/restaurantes', restaurantesRouter)
 app.use('/user', userRouter)
 app.use('/login', loginRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -67,7 +69,7 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500)
   res.render('error')
-
+  next()
 })
 
 module.exports = app
