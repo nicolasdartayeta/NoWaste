@@ -68,6 +68,25 @@ exports.listado_productos = asyncHandler(async (req, res, next) => {
   res.render(template, { baseURL, restaurantesList: restaurantes })
 })
 
+exports.comprar_producto = asyncHandler(async (req, res, next) => {
+  const restaurante = await restauranteModel.findById(req.params.restauranteId)
+  if (restaurante){
+    const producto = await restaurante.producto.id(req.params.productoId)   //busca el produto con el metodo .id()
+    if (producto){ 
+      if (producto.stock === 0 || producto.stock === null){
+        res.status(400).send('El producto esta fuera de stock')
+      }
+      producto.stock -=1 
+      await restaurante.save()
+      res.redirect(`/user`)
+    }else{
+      res.status(404).send('Producto no encontrado')
+    }
+  }else{
+    res.status(404).send('Restaurante no encontrado')
+  }
+})
+
 /*
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {

@@ -18,5 +18,8 @@ router.route('/show/:restauranteId')
 
 router.route('/listadoProductos')
   .get(userController.listado_productos)
+
+router.route('/compra/:restauranteId/:productoId')
+  .get(userController.comprar_producto)
   
 module.exports = router;
