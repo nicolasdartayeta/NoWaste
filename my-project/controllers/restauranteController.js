@@ -1,8 +1,18 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
 const { unlink } = require('node:fs/promises')
-
+const nodemailer = require('nodemailer');
 const multer = require('multer')
+
+require('dotenv').config();
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
@@ -52,7 +62,7 @@ exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
   const { nombre, calle, numero } = req.body
 
   if (!nombre || !calle || !numero) {
-    return res.status(400).json({ error: 'All fields are required.' })
+    return res.status(400).json({ error: 'Completar todos los casilleros.' })
   }
 
   const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero })
@@ -120,7 +130,7 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
         nombre: req.body.nombreProducto,
         descripcion: req.body.descripcion,
         precio: req.body.precio,
-        fecha_caducacion: req.body.fecha_caducacion,
+        fecha_caducidad: req.body.fecha_caducidad,
         stock: req.body.stock,
         imagenesProducto: imagenes
       }
@@ -130,6 +140,23 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
 
       // Guarda el restaurante actualizado en la base de datos.
       await restaurante.save()
+
+      //Envia mensaje por mail, (Nodemailer)  
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: req.user.email,
+        subject: 'Nuevo Producto Añadido!',
+        text: `${restaurante.nombre} ha añadido un nuevo producto: ${nuevoProducto.nombre}`
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return console.log(error);
+        }
+        console.log('Email enviado: ' + info.response);
+      });
+
+
       res.redirect(`${baseURL}/show/${req.body.id}`)
     }
   } else {
