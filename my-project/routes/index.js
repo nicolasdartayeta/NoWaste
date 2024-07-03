@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const sidebarModel = require('../helpers/sidebar.js')
+const sidebarModel = require('../helpers/sidebar.js').Sidebar
 
 /* home page. */
 router.route('/')

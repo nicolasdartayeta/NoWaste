@@ -17,16 +17,16 @@ const baseURL = '/admin/restaurantes'
 
 exports.imageUploader = multer({ storage })
 
-const sidebarModel = require('../helpers/sidebar.js')
+const sidebarHelper = require('../helpers/sidebar.js')
 
 exports.restaurante_home_get = asyncHandler(async (req, res, next) => {
-  const sidebar = new sidebarModel('Menu resturantes')
+  const sidebar = new sidebarHelper.Sidebar('Menu resturantes')
 
   sidebar.addItem("Añadir restaurante", `${baseURL}/add`, `#content`)
   sidebar.addItem("Ver restaurantes", `${baseURL}/show`, `#sidebar`)
 
   let template
-  
+
   if (req.headers['hx-request']) {
     template = 'componentes/sidebarContent'
   } else {
@@ -38,16 +38,19 @@ exports.restaurante_home_get = asyncHandler(async (req, res, next) => {
 
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
-  const restaurantes = await restauranteModel.find().exec()
-
+  // const restaurantes = await restauranteModel.find().exec()
+  // const sidebar = new sidebarModel('Lista resturantes')
+  
+  // restaurantes.forEach((restaurante) => sidebar.addItem(restaurante.nombre, `${baseURL}/show/${restaurante._id}`, "#content", restaurante._id.toString()))
+  
   let template
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxListRestaurante'
   } else {
     template = 'restaurantes/listRestaurantes'
   }
-  console.log('lsitadrodso')
-  res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes })
+  res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL) })
+  // res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes })
 })
 
 // ACTUALIZADO
@@ -94,7 +97,9 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
     const restaurantes = await restauranteModel.find().exec()
 
     let template
-    const parametros = { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
+    const parametros = { 
+      sidebar: await sidebarHelper.sidebarRestaurantes(baseURL),
+      baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
