@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 
 const restauranteSchema = new Schema({
   nombre: String,
+  ciudad: String,
   calle: String,
   numero: Number,
   imagenRestaurante: String,

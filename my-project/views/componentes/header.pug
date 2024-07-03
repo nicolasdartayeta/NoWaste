@@ -5,6 +5,8 @@ header
             div
                 a(href='/')
                     img(src="/static/icons/logo.png", class="w-80 h-auto")
+            if ciudad  
+              p Ubicacion #{ciudad}
             div(class='justify-center')
                 button(
                 onclick="window.location.href='/login/logout'",

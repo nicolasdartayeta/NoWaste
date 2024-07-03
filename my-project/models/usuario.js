@@ -8,6 +8,10 @@ const usuarioSchema = new Schema({
   email:{type: String, required: true, unique: true},
   username:{type: String, required: true},
   password: {type: String, required: true},
+  roles: [{
+    ref: "roles",
+    type: Schema.Types.ObjectId
+  }]
 })
 
 //Cifrado contraseña

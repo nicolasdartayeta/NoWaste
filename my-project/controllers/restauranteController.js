@@ -71,13 +71,13 @@ exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
 
 // Handle Restaurante create on POST.
 exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
-  const { nombre, calle, numero } = req.body
+  const { nombre, ciudad, calle, numero } = req.body
 
-  if (!nombre || !calle || !numero) {
+  if (!nombre || !ciudad || !calle || !numero) {
     return res.status(400).json({ error: 'All fields are required.' })
   }
 
-  const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero })
+  const restaurante = new restauranteModel({ nombre: req.body.nombre, ciudad: ciudad, calle: req.body.calle, numero: req.body.numero })
 
   const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec()
   if (restauranteExists) {
