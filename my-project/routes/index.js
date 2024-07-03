@@ -9,7 +9,7 @@ router.route('/')
     const sidebar = new sidebarModel('Menu principal')
 
     sidebar.addItem("Menu restaurantes", `/admin/restaurantes`, `#sidebar`)
-    sidebar.addItem("Ver modo usuario", `/user`, `#content`)
+    sidebar.addItem("Ver modo usuario", `/user`, `#sidebar`)
 
     res.render('index', {title: 'NoWaste', sidebar: sidebar.sidebar})
   })

@@ -21,6 +21,7 @@ const baseURL = '/user'
 exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
+  res.appendHeader('HX-Redirect', '/user')
   const ip = String(req.connection.remoteAddress)
   try{
     if (!ip.startsWith('::ffff:')){         //condicion debido a tener hosteado en el docker local

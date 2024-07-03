@@ -38,11 +38,6 @@ exports.restaurante_home_get = asyncHandler(async (req, res, next) => {
 
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
-  // const restaurantes = await restauranteModel.find().exec()
-  // const sidebar = new sidebarModel('Lista resturantes')
-  
-  // restaurantes.forEach((restaurante) => sidebar.addItem(restaurante.nombre, `${baseURL}/show/${restaurante._id}`, "#content", restaurante._id.toString()))
-  
   let template
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxListRestaurante'
@@ -50,7 +45,6 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
     template = 'restaurantes/listRestaurantes'
   }
   res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL) })
-  // res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes })
 })
 
 // ACTUALIZADO
