@@ -20,6 +20,6 @@ router.route('/listadoProductos')
   .get(userController.listado_productos)
 
 router.route('/compra/:restauranteId/:productoId')
-  .get(userController.comprar_producto)
+  .post(userController.comprar_producto)
   
 module.exports = router;

@@ -76,9 +76,14 @@ exports.comprar_producto = asyncHandler(async (req, res, next) => {
       if (producto.stock === 0 || producto.stock === null){
         res.status(400).send('El producto esta fuera de stock')
       }
-      producto.stock -=1 
+      const cantidadCompra = parseInt(req.body.cantidad)
+      if (cantidadCompra <= 0 || cantidadCompra > producto.stock) {
+        return res.status(400).send('Cantidad inválida o supera el stock disponible');
+      }
+      console.log(req.body.cantidad)
+      producto.stock -= cantidadCompra;
       await restaurante.save()
-      res.redirect(`/user`)
+      res.redirect(`/user`)       //luego al implementar el pago y demas cambiar esto
     }else{
       res.status(404).send('Producto no encontrado')
     }
