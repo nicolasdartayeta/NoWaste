@@ -80,7 +80,6 @@ exports.comprar_producto = asyncHandler(async (req, res, next) => {
       if (cantidadCompra <= 0 || cantidadCompra > producto.stock) {
         return res.status(400).send('Cantidad inválida o supera el stock disponible');
       }
-      console.log(req.body.cantidad)
       producto.stock -= cantidadCompra;
       await restaurante.save()
       res.redirect(`/user`)       //luego al implementar el pago y demas cambiar esto
