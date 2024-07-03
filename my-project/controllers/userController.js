@@ -3,6 +3,7 @@ const restauranteModel = require('../models/restaurante')
 const { unlink } = require('node:fs/promises')
 const http = require('http')
 const multer = require('multer')
+const sidebarHelper = require('../helpers/sidebar.js')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
@@ -20,6 +21,7 @@ const baseURL = '/user'
 exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
+  res.appendHeader('HX-Redirect', '/user')
   const ip = String(req.connection.remoteAddress)
   try{
     if (!ip.startsWith('::ffff:')){         //condicion debido a tener hosteado en el docker local
@@ -34,14 +36,14 @@ exports.home = asyncHandler(async (req, res, next) => {
     } else {
       template = 'usuarios/usuariosHome'
     }
-    res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: req.session.city})
+    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: req.session.city})
   }catch (error) {
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxListRestaurante'
     } else {
       template = 'usuarios/usuariosHome'
     }
-    res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: 'Tandil'})
+    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: 'Tandil'})
   }
 })
 
@@ -58,7 +60,7 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
     const nombreRestaurante = restaurante.nombre
     const restaurantes = await restauranteModel.find().exec()
     let template
-    const parametros = { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
+    const parametros = { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
