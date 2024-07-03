@@ -12,7 +12,7 @@ const restauranteSchema = new Schema({
                 nombre: String,
                 descripcion: String,
                 precio: Number,
-                fecha_caducacion: Date,
+                fecha_caducidad: String,
                 stock: {
                   type: Number,
                   validate: {

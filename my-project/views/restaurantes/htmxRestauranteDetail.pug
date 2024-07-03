@@ -1,7 +1,7 @@
 div(id=datos._id)
     // URl DE USER
     if baseURL == '/user'
-        button(hx-get=baseURL+"/listadoProductos"  hx-target="#content" class='w-52 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white') volver
+        button(class='absolute bottom-5 right-5 rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen' hx-get=baseURL+"/listadoProductos"  hx-target="#content") volver
     
     p(class='text-2xl font-bold leading-9 tracking-tight text-gray-900')= nombre
 

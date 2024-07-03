@@ -1,12 +1,13 @@
-p=title 
 if restaurantesList.length 
     ul(class='my-6 space-y-2') 
         each restaurante in restaurantesList
             li(id=restaurante.id)
-                div(class="block rounded-lg px-4 py-2 text-sm font-medium bg-gray-100/50 hover:bg-gray-100 hover:text-gray-700")
-                    button(hx-get=`${baseURL}/show/` + restaurante.id hx-target="#content" hx-push-url='true' class='inline-block w-auto') #{restaurante.nombre}
-                    if baseURL == '/admin/restaurantes'
-                        button(hx-delete='/admin/restaurantes/show/'+restaurante.id hx-target='closest li' hx-swap='outerHTML' onclick='checkContent("'+restaurante.id+'")' class='float-right') X
+                div(class='flex w-full text-left rounded-lg px-4 py-2 text-sm font-medium bg-gray-100/50 hover:bg-gray-100 hover:text-gray-700')
+                    div(class='flex-initial w-80')
+                        button(class="w-full text-left block rounded-lg px-4 py-2 text-sm font-medium" hx-get=`${baseURL}/show/` + restaurante.id hx-target="#content" hx-push-url='true') #{restaurante.nombre}
+                    div(class='flex-initial w-5')
+                        if baseURL == '/admin/restaurantes'
+                            button(hx-delete='/admin/restaurantes/show/'+restaurante.id hx-target='closest li' hx-swap='outerHTML' onclick='checkContent("'+restaurante.id+'")' class='float-right align-middle') X
 else 
     p No hay restaurantes
 
