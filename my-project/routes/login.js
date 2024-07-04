@@ -22,4 +22,7 @@ router.route('/logout')
 router.get('/auth/facebook', loginController.signInWithFacebook)
 router.get('/auth/facebook/callback', loginController.signInWithFacebookCallback)
 
+router.get('/auth/google', loginController.signInWithGoogle)
+router.get('/auth/google/callback', loginController.signInWithGoogleCallback);
+
 module.exports = router
