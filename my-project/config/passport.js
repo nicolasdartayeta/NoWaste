@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
 const usuarioModel = require('../models/usuario')
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
-
+const roleModel = require('../models/role')
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
@@ -69,7 +69,7 @@ passport.use(new GoogleStrategy({
       } else {
         const nuevoUsuario = new usuarioModel({           //La contraseña esta mal, pero nose como crear este perfil de facebook
           email: profile.emails[0].value,
-          username: email.split("@")[0], 
+          username: profile.displayName, 
           password: 'googleUser' 
         });
         const role = await roleModel.findOne({nombre:"user"})
