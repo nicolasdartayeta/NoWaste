@@ -41,3 +41,9 @@ exports.signInWithFacebookCallback = passport.authenticate('facebook', {
   failureRedirect: '/login',
   successRedirect: '/user'
 });
+
+exports.signInWithGoogle = passport.authenticate('google', { scope: ['profile', 'email'] });
+exports.signInWithGoogleCallback = passport.authenticate('google', { 
+  failureRedirect: '/login',
+  successRedirect: '/user'
+});
