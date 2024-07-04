@@ -1,14 +1,14 @@
 
 header
-    div(class='bg-customGray mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-12 lg:px-8 shadow-lg')
+    div(class='bg-gray-100 mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-6 lg:px-8')
         div(class='sm:flex sm:items-center sm:justify-between')
             div
                 a(href='/')
-                    img(src="/static/icons/logo.png", class="w-80 h-auto")
+                    img(src="/static/icons/logo.png", class="w-64 h-auto")
             if ciudad  
               p Ubicacion #{ciudad}
-            div(class='justify-center')
+            div
                 button(
                 onclick="window.location.href='/login/logout'",
-                class='inline-block rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white'
+                class='flex items-center justify-center align-middle h-8 w-auto rounded-md border border-customGreen bg-customGreen px-4 py-3 text-center font-medium text-white transition hover:bg-transparent hover:text-customGreen'
                 ) Log In/Out

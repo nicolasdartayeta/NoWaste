@@ -40,11 +40,12 @@ html
       });
     block head
   body
-    div(class='flex flex-col h-screen w-screen overflow-auto')
+    div(class='flex flex-col h-screen w-screen')
       include componentes/header.pug
-      div(class='flex h-full w-full flex-row')
-        div(id='sidebar' class='bg-green-900/30 flex h-full w-80 flex-col justify-start border-e px-4 py-6 overflow-auto overscroll-auto')
+      div(class='flex h-full w-full flex-row overflow-hidden')
+        div(id='sidebar' class='bg-gray-100 flex h-full w-64 flex-col justify-start px-4 py-6')
           block sidebar
 
-        div(id='content' class='bg-green-900/10 flex h-full w-full flex-col justify-start border-e px-4 py-6 overflow-auto')
-          block content 
+        div(class='bg-gray-100 w-full h-full overflow-hidden')
+          div(id='content' class='bg-customGray flex h-full w-full flex-col justify-start rounded-tl-3xl shadow-inner px-4 py-6 overflow-y-auto')
+            block content 

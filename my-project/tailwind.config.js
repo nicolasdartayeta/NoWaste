@@ -9,6 +9,9 @@ module.exports = {
         customGreen: '#516244',
         customLightGreen: '#758D63',
       },
+      innerShadow: {
+        '3xl': '35px 35px 60px -15px rgba(0, 0, 0, 0.3)',
+      }
     },
   },
   plugins: [

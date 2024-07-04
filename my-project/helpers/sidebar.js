@@ -27,7 +27,7 @@ class sidebarModel {
 
 async function sidebarRestaurantes(baseURL) {
     const restaurantes = await restauranteModel.find().exec()
-    const sidebar = new sidebarModel('Lista resturantes')
+    const sidebar = new sidebarModel('Lista de comercios')
   
     restaurantes.forEach((restaurante) => sidebar.addItem(restaurante.nombre, `${baseURL}/show/${restaurante._id}`, "#content", restaurante._id.toString()))
 
