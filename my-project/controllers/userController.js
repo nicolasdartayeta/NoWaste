@@ -49,8 +49,13 @@ exports.home = asyncHandler(async (req, res, next) => {
 
 exports.busqueda = asyncHandler(async (req, res, next) => {
   const restaurantes = await restauranteModel.find({ nombre: { $regex: req.body.search, $options: 'i' } }).exec()
-  console.log(req)
-  res.render('restaurantes/htmxListRestaurante', { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes })
+  const sidebar = new sidebarHelper.Sidebar('Lista de comercios')
+
+  for (const restaurante of restaurantes) {
+    console.log(restaurante)
+    sidebar.addItem(restaurante.nombre, `/user/show/${restaurante._id}`, '#content')
+  }
+  res.render('restaurantes/htmxListRestaurante', {sidebar: sidebar.sidebar})
 })
 
 exports.restaurante_list = asyncHandler(async (req, res, next) => {

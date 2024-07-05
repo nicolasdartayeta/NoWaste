@@ -1,9 +1,10 @@
 mixin item(item)
     li(id=item.id)
-        button(hx-get=item.requestURL hx-target=item.target hx-push-url='true' class="w-full block rounded-lg px-4 py-2 text-sm font-medium bg-gray-100/50 hover:bg-gray-100 hover:text-gray-700")=item.title 
+        console.log(item.title)
+        button(hx-get=item.requestURL hx-target=item.target hx-push-url='true' class="w-full flex justify-start rounded-lg px-4 py-2 text-sm font-medium bg-gray-100/50 hover:bg-gray-100 hover:text-gray-700")=item.title 
 
 
-p(class='text-lg')=sidebar.title 
+p(class='text-lg mt-5')=sidebar.title 
 
 ul(class="my-6 space-y-1")
     each item in sidebar.items
