@@ -16,11 +16,11 @@ html
             label(for='password' class='block text-left font-semibold py-1') Contraseña
             input(type='password', placeholder='Ingrese Contraseña' name='password' required class='w-full px-3 py-2 border rounded-lg')
           div
-            div(class='flex space-x-2 justify-center py-2')
+            div(class='flex space-x-2 py-2')
                 button(type='submit' class='btn btn-primary w-full py-2 bg-customGreen text-white rounded-lg') Iniciar sesión
                 button(type='button' onclick="window.location.href='/login/register'" class='btn btn-secondary w-full py-2 bg-gray-200 border border-customGreen text-customGreen rounded-lg') Registrarse
-            div(class='flex w-full bg-blue-500 text-white px-4 py-2 rounded-lg')
+            div(class='flex w-full bg-white text-black px-4 py-2 rounded-lg')
               div(class='flex-auto flex items-center justify-center')
-                img(src='/static/icons/facebook_logo.png' class='w-6')
-              div(class='flex-auto flex items-center justify-center')
-                a(href="/login/auth/google" class='btn btn-primary') Iniciar sesión con Facebook
+                img(src='/static/icons/google_logo.png' class='w-6')
+              div(class='flex-auto flex items-center')
+                a(href="/login/auth/google" class='btn btn-primary') Iniciar sesión con Google
