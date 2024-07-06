@@ -7,10 +7,7 @@ block head
     }
 
 block sidebar
-  p Lista de comercios
-  input(class="w-full form-control" type="search" name="search" placeholder="Buscar por nombre" hx-post="/user" hx-trigger="input changed delay:500ms, search" hx-target="#search-results" hx-indicator=".htmx-indicator") 
-  div#search-results
-    include ../restaurantes/htmxListRestaurante.pug
+  include ../restaurantes/htmxListRestaurante.pug
 
 
 block content 

@@ -1,4 +1,8 @@
 if sidebar.items.length
-    include ../componentes/sidebarContent.pug 
+    div(class='flex shadow-xl')
+        input(class="w-full form-control rounded-lg py-1" type="search" name="search" placeholder="Buscar comercio" hx-post="/user" hx-trigger="input changed delay:500ms, search" hx-target="#search-results" hx-indicator=".htmx-indicator") 
+    div(class='overflow-y-auto')
+        div#search-results
+            include ../componentes/sidebarContent.pug 
 else 
     p No hay restaurantes
