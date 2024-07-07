@@ -7,7 +7,8 @@ module.exports = {
       colors: {
         customGray: '#E7EBE5',
         customGreen: '#516244',
-        customLightGreen: '#758D63',
+        customSimilar4: '#c3d5ca',
+        customGreenSoft3: '#b0c6b5',
       },
       innerShadow: {
         '3xl': '35px 35px 60px -15px rgba(0, 0, 0, 0.3)',

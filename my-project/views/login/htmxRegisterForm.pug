@@ -4,24 +4,24 @@ html
     link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
     script(src="https://unpkg.com/htmx.org@1.8.4")
 
-  body(class='flex justify-center text-center items-center min-h-screen bg-gray-100')
+  body(class='flex justify-center text-center items-center min-h-screen bg-gradient-to-br from-lime-300 to-green-900')
     div(class='bg-customGray p-8 rounded-2xl shadow-2xl')
       img(src="/static/icons/logo.png", class="w-80 h-auto px-3 py-8")
       div
         form(action="/login/register", method="post")
           div(class=" space-y-2")
             div
-              label(for='email' class='block text-left font-semibold py-1') Email
+              label(for='email' class='block text-left font-semibold py-1 bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Email
               input(type='email', pattern="[^ @]*@[^ @]*", placeholder='Ingrese e-mail' name='email' required class='w-full px-3 py-2 border rounded-lg')
             div
-              label(for='username' class='block text-left font-semibold py-1') Usuario
-              input(type='text', placeholder='Ingrese Usuario' name='username' required class='w-full px-3 py-2 border rounded-lg')
+              label(for='username' class='block text-left font-semibold py-1 bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Usuario
+              input(type='text', placeholder='Ingrese usuario' name='username' required class='w-full px-3 py-2 border rounded-lg')
             div
-              label(for='password' class='block text-left font-semibold py-1') Contraseña
-              input(type='password', placeholder='Ingrese Contraseña' name='password' required class='w-full px-3 py-2 border rounded-lg')
+              label(for='password' class='block text-left font-semibold py-1 bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Contraseña
+              input(type='password', placeholder='Ingrese contraseña' name='password' required class='w-full px-3 py-2 border rounded-lg')
             div
-              label(for='confirm_password' class='block text-left font-semibold py-1') Confirmar Contraseña
-              input(type='password', placeholder='Ingrese Contraseña' name='confirm_password' required class='w-full px-3 py-2 border rounded-lg')
+              label(for='confirm_password' class='block text-left font-semibold py-1 bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Confirmar Contraseña
+              input(type='password', placeholder='Ingrese contraseña' name='confirm_password' required class='w-full px-3 py-2 border rounded-lg')
           div(class='flex space-x-4 justify-center mt-4')
             button(type='submit' class='btn btn-primary px-4 py-2 bg-customGreen text-white rounded-lg w-full') Registrar
             button(type='button', onclick="window.location.href='/login'" class='btn btn-primary px-4 py-2 bg-gray-200 border border-customGreen text-customGreen rounded-lg w-full') Volver a Login

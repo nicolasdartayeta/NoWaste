@@ -4,17 +4,17 @@ html
     link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
     script(src="https://unpkg.com/htmx.org@1.8.4")
 
-  body(class='flex justify-center text-center items-center min-h-screen bg-gray-100')
+  body(class='flex justify-center text-center items-center min-h-screen bg-gradient-to-br from-lime-300 to-green-900')
     div(class='bg-customGray p-8 rounded-2xl shadow-2xl')
       img(src="/static/icons/logo.png", class="w-80 h-auto px-3 py-8")
       div
         form(action="/login", method="post" class='space-y-4')
           div
-            label(for='email' class='block text-left font-semibold py-1') Usuario
+            label(for='email' class='block text-left font-semibold py-1 bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Usuario
             input(type='text', placeholder='Ingrese e-mail' name='email' required class='w-full px-3 py-2 border rounded-lg')
           div
-            label(for='password' class='block text-left font-semibold py-1') Contraseña
-            input(type='password', placeholder='Ingrese Contraseña' name='password' required class='w-full px-3 py-2 border rounded-lg')
+            label(for='password' class='block text-left font-semibold py-1 bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Contraseña
+            input(type='password', placeholder='Ingrese contraseña' name='password' required class='w-full px-3 py-2 border rounded-lg')
           div
             div(class='flex space-x-2 py-2')
                 button(type='submit' class='w-full py-2 bg-customGreen text-white rounded-lg') Iniciar sesión
