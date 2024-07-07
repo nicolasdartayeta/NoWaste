@@ -23,12 +23,28 @@ createRoles()
 
 // Set up mongoose connection
 const mongoose = require('mongoose')
-mongoose.set('strictQuery', false)
-const mongoDB = mongoConfig.mongoDBUri
 
-main().catch((err) => console.log(err))
-async function main () {
-  await mongoose.connect(mongoDB)
+if (process.env.DB_MODE === 'local') {
+  mongoose.set('strictQuery', false)
+  const mongoDB = process.env.MONGODB_URI_LOCAL
+
+  main().catch((err) => console.log(err))
+  async function main () {
+    await mongoose.connect(mongoDB)
+  }
+} else if (process.env.DB_MODE === 'cloud') {
+  const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+  async function run() {
+    try {
+      // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
+      await mongoose.connect(process.env.MONGODB_URI_CLOUD, clientOptions);
+      await mongoose.connection.db.admin().command({ ping: 1 });
+      console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    } finally {
+      console.log("Algo salio mal al conectarse a la base de datos en la nube");
+    }
+  }
+  run().catch(console.dir);
 }
 
 // view engine setup

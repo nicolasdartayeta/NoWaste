@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "npm install;  npx tailwindcss -i ./public/stylesheets/baseTailwind.css -o ./public/stylesheets/outputTailwind.css; nodemon -L ./bin/www"
+    "start": "npm install; npx tailwindcss -i ./public/stylesheets/baseTailwind.css -o ./public/stylesheets/outputTailwind.css; nodemon -L ./bin/www"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
