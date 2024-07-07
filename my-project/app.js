@@ -15,10 +15,12 @@ const session = require('express-session')
 
 require('dotenv').config();
 require('./config/passport')
-const createRoles = require('./helpers/roleSetup');
+
 
 const app = express()
-createRoles()
+
+// const createRoles = require('./helpers/roleSetup');
+// createRoles()
 
 // Set up mongoose connection
 const mongoose = require('mongoose')
