@@ -1,6 +1,6 @@
 if sidebar.items.length
     div(class='flex shadow-xl')
-        input(class="w-full form-control rounded-lg py-1" type="search" name="search" placeholder="Buscar comercio" hx-post="/user" hx-trigger="input changed delay:500ms, search" hx-target="#search-results" hx-indicator=".htmx-indicator") 
+        input(class="w-full form-control rounded-lg py-1 text-center" type="search" name="search" placeholder="Buscar comercio" hx-post="/user" hx-trigger="input changed delay:500ms, search" hx-target="#search-results" hx-indicator=".htmx-indicator") 
     div(class='overflow-y-auto')
         div#search-results
             include ../componentes/sidebarContent.pug 
