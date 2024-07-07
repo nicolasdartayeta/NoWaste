@@ -6,7 +6,6 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
-const mongoConfig = require('./config/mongo')
 const indexRouter = require('./routes/index')
 const restaurantesRouter = require('./routes/restaurantes')
 const userRouter = require('./routes/user')
@@ -15,10 +14,10 @@ const passport = require('passport')
 const session = require('express-session')
 
 require('dotenv').config();
-require('./config/passport')
-const createRoles = require('./helpers/roleSetup');
+require('./config/passport');
 
 const app = express()
+const createRoles = require('./helpers/roleSetup');
 createRoles()
 
 // Set up mongoose connection
