@@ -56,6 +56,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser(''))
 app.use('/static', express.static(path.join(__dirname, 'public')))
+app.use('/helpers', express.static(path.join(__dirname, 'helpers')))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(session({
   secret: 'keyboard cat',

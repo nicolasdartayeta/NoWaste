@@ -21,29 +21,29 @@ const baseURL = '/user'
 exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
-  res.appendHeader('HX-Redirect', '/user')
-  const ip = String(req.connection.remoteAddress)
-  try{
-    if (!ip.startsWith('::ffff:')){         //condicion debido a tener hosteado en el docker local
-      data = await obtenerCiudad('ip')
-      req.session.city = data.city}
-    else{ req.session.city = 'Tandil'}
-
+  const { lat, lng } = req.query
+  console.log(req.query)
+  let template
+  if (lat && lng) {
+    data = await obtenerCiudadl(lat, lng).then()
+    req.session.lat=lat;
+    req.session.long=lng;
+    req.session.city = data
+    console.log('Location received:',req.session.city)
+  }
+  if ( req.session.lat & req.session.long) {
+    res.appendHeader('HX-Redirect', '/user')
+    console.log('Location received:', req.session.lat, req.session.long)
+    if (req.headers['hx-request']) {
+      template = 'restaurantes/htmxListRestaurante'
+    } else {
+      template = 'usuarios/usuariosHome'
+    }
     const restaurantes = await restauranteModel.find().exec()
-    let template
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxListRestaurante'
-    } else {
-      template = 'usuarios/usuariosHome'
-    }
     res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: req.session.city})
-  }catch (error) {
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxListRestaurante'
-    } else {
-      template = 'usuarios/usuariosHome'
-    }
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: 'Tandil'})
+  }else{
+    res.appendHeader('HX-Redirect', '/user/mapa')
+    res.render('usuarios/mapa')
   }
 })
 
@@ -112,38 +112,49 @@ exports.comprar_producto = asyncHandler(async (req, res, next) => {
   }
 })
 
+exports.mapa = asyncHandler(async (req, res, next) => {
+  res.appendHeader('HX-Redirect', '/user/mapa')
+  let template
+  if (req.headers['hx-request']) {
+    template = 'usuarios/mapa'
+  } else {
+    template = 'usuarios/mapa'// ERROR
+  }
+  res.render(template)
+})
 
-function obtenerCiudad(ip) {
-  return new Promise((resolve, reject) => {
-    // Opciones de la solicitud, construyendo la URL con la IP
-    const options = {
-      hostname: 'ip-api.com',
-      port: 80,
-      path: `/json/190.246.97.123`,
-      method: 'GET'
-    };
-
-    const req = http.request(options, (res) => {
-      let responseData = '';
-
-      res.on('data', (chunk) => {
-        responseData += chunk;
-      });
-
-      res.on('end', () => {
-        try {
-          const parsedData = JSON.parse(responseData);
-          resolve(parsedData);
-        } catch (e) {
-          reject(e);
-        }
-      });
+function obtenerCiudadl(lat,lng) {
+    const apiKey = 'AIzaSyAhhvWfIshMJsUA5QsuWoDaFLQtb62WnTA'; // Reemplaza con tu API key de Google Maps
+    const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+  
+    return new Promise((resolve, reject) => {
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.status === 'OK') {
+            // Extract the city name from the response
+            const addressComponents = data.results[0].address_components;
+            let city = '';
+            for (let component of addressComponents) {
+              if (component.types.includes('locality')) {
+                city = component.long_name;
+                break;
+              }
+            }
+            resolve(city);
+          } else {
+            console.error('Geocoding API request failed:', data.status);
+            reject(new Error('Geocoding API request failed'));
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          reject(error);
+        });
     });
-
-    req.on('error', (error) => {
-      reject(error);
-    });
-
-    req.end();
-  });
 }

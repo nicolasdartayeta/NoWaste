@@ -6,7 +6,9 @@ header
                 a(href='/')
                     img(src="/static/icons/logo.png", class="w-64 h-auto")
             if ciudad  
-              p Ubicacion #{ciudad}
+              div
+                p Ubicacion #{ciudad}
+                button(hx-get="/user/mapa" hx-swap="innerHTML") edit
             div
                 button(
                 onclick="window.location.href='/login/logout'",
