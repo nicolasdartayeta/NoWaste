@@ -6,6 +6,7 @@
     "start": "npm install; npx tailwindcss -i ./public/stylesheets/baseTailwind.css -o ./public/stylesheets/outputTailwind.css; nodemon -L ./bin/www"
   },
   "dependencies": {
+    "@infisical/sdk": "^2.2.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cookie-parser": "~1.4.4",

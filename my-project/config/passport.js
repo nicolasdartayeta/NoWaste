@@ -55,33 +55,33 @@ passport.use(new FacebookStrategy({
       }
     }));
 
-// passport.use(new GoogleStrategy({
-//     clientID: process.env.GOOGLE_CLIENT_ID,
-//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//     callbackURL: "http://localhost:3000/login/auth/google/callback"
-//   },
-//   async(accessToken, refreshToken, profile, done) => {
-//     try {
-//       email = profile.emails[0].value
-//       user = await usuarioModel.findOne({email: email});
-//       if (user) {
-//         return done(null, user);
-//       } else {
-//         const nuevoUsuario = new usuarioModel({           //La contraseña esta mal, pero nose como crear este perfil de facebook
-//           email: profile.emails[0].value,
-//           username: profile.displayName, 
-//           password: 'googleUser' 
-//         });
-//         const role = await roleModel.findOne({nombre:"user"})
-//         nuevoUsuario.roles = [role._id]
-//         await nuevoUsuario.save();
-//         return done(null, nuevoUsuario);
-//       }
-//     } catch(err){
-//       return done(err)
-//     }
-//   }
-// ));
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/login/auth/google/callback"
+  },
+  async(accessToken, refreshToken, profile, done) => {
+    try {
+      email = profile.emails[0].value
+      user = await usuarioModel.findOne({email: email});
+      if (user) {
+        return done(null, user);
+      } else {
+        const nuevoUsuario = new usuarioModel({           //La contraseña esta mal, pero nose como crear este perfil de facebook
+          email: profile.emails[0].value,
+          username: profile.displayName, 
+          password: 'googleUser' 
+        });
+        const role = await roleModel.findOne({nombre:"user"})
+        nuevoUsuario.roles = [role._id]
+        await nuevoUsuario.save();
+        return done(null, nuevoUsuario);
+      }
+    } catch(err){
+      return done(err)
+    }
+  }
+));
 
 passport.serializeUser((user,done) => {
     done(null,user.id)

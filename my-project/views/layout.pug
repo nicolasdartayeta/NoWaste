@@ -36,7 +36,8 @@ html
               btnDerecha.addEventListener("click", () => {
                   currentIndex = (currentIndex < slideCount - 1) ? currentIndex + 1 : 0;
                   const translateX = -currentIndex * slideWidth;
-                  slides.style.transform = `translateX(${translateX}px)`;              });
+                  slides.style.transform = `translateX(${translateX}px)`;
+                  });
           });
       });
     block head
