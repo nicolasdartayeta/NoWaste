@@ -124,37 +124,21 @@ exports.mapa = asyncHandler(async (req, res, next) => {
 })
 
 function obtenerCiudadl(lat,lng) {
-    const apiKey = 'AIzaSyAhhvWfIshMJsUA5QsuWoDaFLQtb62WnTA'; // Reemplaza con tu API key de Google Maps
-    const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
-  
+    let key = process.env.APIKEY_LOCATIONIQ;
+    const apiUrl = `https://us1.locationiq.com/v1/reverse?key=${key}&lat=${lat}&lon=${lng}&format=json&`;
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
+
+    
     return new Promise((resolve, reject) => {
-      fetch(apiUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
+      fetch(apiUrl, options)
+        .then(response => response.json())
         .then(data => {
-          if (data.status === 'OK') {
-            // Extract the city name from the response
-            const addressComponents = data.results[0].address_components;
-            let city = '';
-            for (let component of addressComponents) {
-              if (component.types.includes('locality')) {
-                city = component.long_name;
-                break;
-              }
-            }
-            resolve(city);
+          if (data && data.address && data.address.city) {
+            resolve(data.address.city);
           } else {
-            console.error('Geocoding API request failed:', data.status);
-            reject(new Error('Geocoding API request failed'));
+            reject('No se pudo obtener la ciudad de la respuesta.');
           }
         })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-          reject(error);
-        });
+        .catch(err => reject(err));
     });
 }
