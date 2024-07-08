@@ -3,15 +3,15 @@ div(id=datos._id)
     if baseURL == '/user'
         button(class='absolute bottom-5 right-5 rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen' hx-get=baseURL+"/listadoProductos"  hx-target="#content") volver
     
-    p(class='text-2xl font-bold leading-9 tracking-tight text-gray-900')= nombre
+    p(class='text-2xl font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent')= nombre
 
     if datos.length != 0
-        ul(class=' space-y-2') 
+        ul(class='space-y-2')
             each dato, atributo in datos
-                if (atributo != 'imagen' && atributo != '_id' && atributo != '__v' && atributo != 'producto')
+                if (atributo != 'nombre' && atributo != 'imagen' && atributo != '_id' && atributo != '__v' && atributo != 'producto')
                     li #{atributo}: #{dato}
             if (datos.producto.length != 0)
-                p(class='text-lg font-bold leading-9 tracking-tight text-gray-800') Productos
+                p(class='text-lg font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Productos
                 ul.listaProductos
                     each producto in datos.producto
                         li.producto

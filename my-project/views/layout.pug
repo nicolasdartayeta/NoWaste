@@ -3,6 +3,8 @@ html
   head
     title NoWaste
     link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
+    script(src="https://cdn.jsdelivr.net/npm/flatpickr")
     script(src="https://unpkg.com/htmx.org@1.8.4")
     script.
       function checkContent(restauranteId) {
@@ -15,7 +17,6 @@ html
     script.
       document.addEventListener("DOMContentLoaded", () => {
           const sliders = document.querySelectorAll ('.slider');
-          console.log(sliders);
           sliders.forEach((slider, index) => {
               const slides = slider.querySelector('.slides');
               console.log(slider);
@@ -41,22 +42,10 @@ html
     block head
   body
     div(class='flex flex-col h-screen w-screen overflow-auto')
-      header
-        div(class='bg-customGray mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-12 lg:px-8 shadow-lg')
-          div(class='sm:flex sm:items-center sm:justify-between')
-            div
-              a(href='/')
-                img(src="/static/icons/logo.png", class="w-80 h-auto")
-            div(class='justify-center')
-              button(
-                onclick="window.location.href='/login/logout'",
-                class='inline-block rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white'
-              ) Log In/Out
-        
-      div(class='flex h-full w-full flex-row')
-        div(class='bg-green-900/30 flex h-full w-80 flex-col justify-between border-e px-4 py-6 overflow-auto overscroll-auto')
-          div(id='sidebar')
-            block sidebar
+      include componentes/header.pug
+      div(class='flex h-full w-full flex-row overflow-hidden')
+        div(id='sidebar' class='bg-green-900/30 flex h-full w-64 flex-col justify-start px-4 py-6 overflow-y-auto')
+          block sidebar
 
-        div(id='content' class='bg-green-900/10 flex h-full w-full flex-col justify-between border-e px-4 py-6 overflow-auto')
-          block content 
+        div(id='content' class='bg-green-900/10 flex h-full w-full flex-col justify-start px-4 py-6 overflow-y-auto shadow-inner')
+          block content

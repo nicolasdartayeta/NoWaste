@@ -1,0 +1,14 @@
+
+header
+    div(class='bg-customSimilar4 shadow-lg mx-auto my-0 max-w-screen px-4 py-4 sm:px-6 sm:py-6 lg:px-8')
+        div(class='sm:flex sm:items-center sm:justify-between bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent')
+            div
+                a(href='/')
+                    img(src="/static/icons/logo.png", class="w-64 h-auto")
+            if ciudad  
+              p Ubicacion #{ciudad}
+            div
+                button(
+                onclick="window.location.href='/login/logout'",
+                class='flex items-center justify-center align-middle h-8 w-auto rounded-md border border-customGreen bg-customGreen px-4 py-3 text-center font-medium text-white transition hover:bg-transparent hover:text-customGreen'
+                ) Log In/Out

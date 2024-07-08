@@ -1,10 +1,10 @@
 div(class='flex flex-col items-center justify-center p-4 w-full')    
-    p(class='text-2xl font-bold leading-9 tracking-tight text-gray-900') Productos
+    p(class='text-2xl font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Productos
     
     if restaurantesList.length 
         div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
-            //- ul.listaProductosUser(style="margin-top: 20px;")
             each restaurante in restaurantesList
+                //if restaurante.ciudad == ciudad      si lo dejas no muestra productos en /user              
                 each producto in restaurante.producto
                     div
                         ul
@@ -24,13 +24,14 @@ div(class='flex flex-col items-center justify-center p-4 w-full')
                                 else
                                     if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'stock')
                                         p #{atributo}: #{valor}
-                            //label(for=`cantidad-${producto._id}`) Cantidad:
-                            //input(type="number", id=`cantidad-${producto._id}`, name=`cantidad-${producto._id}`, min="1", max=producto.stock, value="1")
-                            //a(href=`/user/compra/${restaurante._id}/${producto._id}` class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar
-                            
-                            form(action=`/user/compra/${restaurante._id}/${producto._id}`, method="POST")
-                                label(for=`cantidad-${producto._id}`) Cantidad:
-                                input(type="number", id=`cantidad-${producto._id}`, name=`cantidad`, min="1", max=producto.stock, value="1")
-                                button(type="submit" class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar 
+                            script. 
+                                function log(m) {
+                                    console.log(m);
+                                };
+                            if (producto.stock > 0)
+                                form(action=`/user/compra/${restaurante._id}/${producto._id}`, method="POST")
+                                    label(for=`cantidad-${producto._id}`) Cantidad:
+                                    input(type="number", id=`cantidad-${producto._id}`, name=`cantidad`, min="1", max=producto.stock, value="1")
+                                    button(onclick=`log(${producto.stock})` type="submit" class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar 
     else                                
         p No hay productos disponibles

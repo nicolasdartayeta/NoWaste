@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const usuarioModel = require('../models/usuario')
+const roleModel = require('../models/role')
 const passport = require('passport')
 
 exports.signIn = passport.authenticate('local',{ //Uso estrategia definida en passport.js
@@ -17,6 +18,8 @@ exports.signUp = asyncHandler(async (req, res, next) => {
       res.send('Email ya esta en uso')
     } else {
       const nuevoUsuario = new usuarioModel({email,username,password})
+      const role = await roleModel.findOne({nombre:"user"})
+      nuevoUsuario.roles = [role._id]
       nuevoUsuario.password = await nuevoUsuario.encriptar(password)
       await nuevoUsuario.save()
       res.redirect('/login')
@@ -35,6 +38,12 @@ exports.logOut = asyncHandler(async (req, res, next) => {
 
 exports.signInWithFacebook = passport.authenticate('facebook');
 exports.signInWithFacebookCallback = passport.authenticate('facebook', {
+  failureRedirect: '/login',
+  successRedirect: '/user'
+});
+
+exports.signInWithGoogle = passport.authenticate('google', { scope: ['profile', 'email'] });
+exports.signInWithGoogleCallback = passport.authenticate('google', { 
   failureRedirect: '/login',
   successRedirect: '/user'
 });

@@ -1,8 +1,18 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
 const { unlink } = require('node:fs/promises')
-
+const nodemailer = require('nodemailer');
 const multer = require('multer')
+
+require('dotenv').config();
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
@@ -17,24 +27,40 @@ const baseURL = '/admin/restaurantes'
 
 exports.imageUploader = multer({ storage })
 
+const sidebarHelper = require('../helpers/sidebar.js')
+
+exports.restaurante_home_get = asyncHandler(async (req, res, next) => {
+  const sidebar = new sidebarHelper.Sidebar('Menu resturantes')
+
+  sidebar.addItem("Añadir restaurante", `${baseURL}/add`, `#content`)
+  sidebar.addItem("Ver restaurantes", `${baseURL}/show`, `#sidebar`)
+
+  let template
+
+  if (req.headers['hx-request']) {
+    template = 'componentes/sidebarContent'
+  } else {
+    template = 'restaurantes/restaurantesHome'
+  }
+
+  res.render(template, {sidebar: sidebar.sidebar})
+})
+
 // ACTUALIZADO
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
-  const restaurantes = await restauranteModel.find().exec()
-
   let template
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxListRestaurante'
   } else {
     template = 'restaurantes/listRestaurantes'
   }
-  console.log('lsitadrodso')
-  res.render(template, { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes })
+  res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL) })
 })
 
 // ACTUALIZADO
 exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
   let template
-  const parametros = {}
+  const parametros = {title: 'pene'}
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddRestaurante'
@@ -49,13 +75,13 @@ exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
 
 // Handle Restaurante create on POST.
 exports.restaurante_create_post = asyncHandler(async (req, res, next) => {
-  const { nombre, calle, numero } = req.body
+  const { nombre, ciudad, calle, numero } = req.body
 
-  if (!nombre || !calle || !numero) {
+  if (!nombre || !ciudad || !calle || !numero) {
     return res.status(400).json({ error: 'All fields are required.' })
   }
 
-  const restaurante = new restauranteModel({ nombre: req.body.nombre, calle: req.body.calle, numero: req.body.numero })
+  const restaurante = new restauranteModel({ nombre: req.body.nombre, ciudad: ciudad, calle: req.body.calle, numero: req.body.numero })
 
   const restauranteExists = await restauranteModel.findOne({ nombre: req.body.name }).exec()
   if (restauranteExists) {
@@ -75,7 +101,9 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
     const restaurantes = await restauranteModel.find().exec()
 
     let template
-    const parametros = { baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
+    const parametros = { 
+      sidebar: await sidebarHelper.sidebarRestaurantes(baseURL),
+      baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
@@ -120,7 +148,7 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
         nombre: req.body.nombreProducto,
         descripcion: req.body.descripcion,
         precio: req.body.precio,
-        fecha_caducacion: req.body.fecha_caducacion,
+        fecha_caducidad: req.body.fecha_caducidad,
         stock: req.body.stock,
         imagenesProducto: imagenes
       }
@@ -130,6 +158,23 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
 
       // Guarda el restaurante actualizado en la base de datos.
       await restaurante.save()
+
+      //Envia mensaje por mail, (Nodemailer)  
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: req.user.email,
+        subject: 'Nuevo Producto Añadido!',
+        text: `${restaurante.nombre} ha añadido un nuevo producto: ${nuevoProducto.nombre}`
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return console.log(error);
+        }
+        console.log('Email enviado: ' + info.response);
+      });
+
+
       res.redirect(`${baseURL}/show/${req.body.id}`)
     }
   } else {

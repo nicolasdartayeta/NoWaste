@@ -1,14 +1,8 @@
-if restaurantesList.length 
-    ul(class='my-6 space-y-2') 
-        each restaurante in restaurantesList
-            li(id=restaurante.id)
-                div(class='flex w-full text-left rounded-lg px-4 py-2 text-sm font-medium bg-gray-100/50 hover:bg-gray-100 hover:text-gray-700')
-                    div(class='flex-initial w-80')
-                        button(class="w-full text-left block rounded-lg px-4 py-2 text-sm font-medium" hx-get=`${baseURL}/show/` + restaurante.id hx-target="#content" hx-push-url='true') #{restaurante.nombre}
-                    div(class='flex-initial w-5')
-                        if baseURL == '/admin/restaurantes'
-                            button(hx-delete='/admin/restaurantes/show/'+restaurante.id hx-target='closest li' hx-swap='outerHTML' onclick='checkContent("'+restaurante.id+'")' class='float-right align-middle') X
+if sidebar.items.length
+    div(class='flex shadow-xl')
+        input(class="w-full form-control rounded-lg py-1 text-center" type="search" name="search" placeholder="Buscar comercio" hx-post="/user" hx-trigger="input changed delay:500ms, search" hx-target="#search-results" hx-indicator=".htmx-indicator") 
+    div(class='overflow-y-auto')
+        div#search-results
+            include ../componentes/sidebarContent.pug 
 else 
     p No hay restaurantes
-
-button(onclick="window.location.href='/'") Ir a la página principal
