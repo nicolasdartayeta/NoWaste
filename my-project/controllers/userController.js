@@ -21,29 +21,29 @@ const baseURL = '/user'
 exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
-  res.appendHeader('HX-Redirect', '/user')
-  const ip = String(req.connection.remoteAddress)
-  try{
-    if (!ip.startsWith('::ffff:')){         //condicion debido a tener hosteado en el docker local
-      data = await obtenerCiudad('ip')
-      req.session.city = data.city}
-    else{ req.session.city = 'Tandil'}
-
+  const { lat, lng } = req.query
+  console.log(req.query)
+  let template
+  if (lat && lng) {
+    data = await obtenerCiudadl(lat, lng).then()
+    req.session.lat=lat;
+    req.session.long=lng;
+    req.session.city = data
+    console.log('Location received:',req.session.city)
+  }
+  if ( req.session.lat & req.session.long) {
+    res.appendHeader('HX-Redirect', '/user')
+    console.log('Location received:', req.session.lat, req.session.long)
+    if (req.headers['hx-request']) {
+      template = 'restaurantes/htmxListRestaurante'
+    } else {
+      template = 'usuarios/usuariosHome'
+    }
     const restaurantes = await restauranteModel.find().exec()
-    let template
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxListRestaurante'
-    } else {
-      template = 'usuarios/usuariosHome'
-    }
     res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: req.session.city})
-  }catch (error) {
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxListRestaurante'
-    } else {
-      template = 'usuarios/usuariosHome'
-    }
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: 'Tandil'})
+  }else{
+    res.appendHeader('HX-Redirect', '/user/mapa')
+    res.render('usuarios/mapa')
   }
 })
 
@@ -112,38 +112,33 @@ exports.comprar_producto = asyncHandler(async (req, res, next) => {
   }
 })
 
+exports.mapa = asyncHandler(async (req, res, next) => {
+  res.appendHeader('HX-Redirect', '/user/mapa')
+  let template
+  if (req.headers['hx-request']) {
+    template = 'usuarios/mapa'
+  } else {
+    template = 'usuarios/mapa'// ERROR
+  }
+  res.render(template)
+})
 
-function obtenerCiudad(ip) {
-  return new Promise((resolve, reject) => {
-    // Opciones de la solicitud, construyendo la URL con la IP
-    const options = {
-      hostname: 'ip-api.com',
-      port: 80,
-      path: `/json/190.246.97.123`,
-      method: 'GET'
-    };
+function obtenerCiudadl(lat,lng) {
+    let key = process.env.APIKEY_LOCATIONIQ;
+    const apiUrl = `https://us1.locationiq.com/v1/reverse?key=${key}&lat=${lat}&lon=${lng}&format=json&`;
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
 
-    const req = http.request(options, (res) => {
-      let responseData = '';
-
-      res.on('data', (chunk) => {
-        responseData += chunk;
-      });
-
-      res.on('end', () => {
-        try {
-          const parsedData = JSON.parse(responseData);
-          resolve(parsedData);
-        } catch (e) {
-          reject(e);
-        }
-      });
+    
+    return new Promise((resolve, reject) => {
+      fetch(apiUrl, options)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.address && data.address.city) {
+            resolve(data.address.city);
+          } else {
+            reject('No se pudo obtener la ciudad de la respuesta.');
+          }
+        })
+        .catch(err => reject(err));
     });
-
-    req.on('error', (error) => {
-      reject(error);
-    });
-
-    req.end();
-  });
 }

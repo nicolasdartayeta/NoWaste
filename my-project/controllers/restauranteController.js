@@ -54,7 +54,8 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
   } else {
     template = 'restaurantes/listRestaurantes'
   }
-  res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL) })
+  console.log("HOLAA")
+  res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL, "true") })
 })
 
 // ACTUALIZADO
@@ -102,7 +103,7 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
 
     let template
     const parametros = { 
-      sidebar: await sidebarHelper.sidebarRestaurantes(baseURL),
+      sidebar: await sidebarHelper.sidebarRestaurantes(baseURL, "true"),
       baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'

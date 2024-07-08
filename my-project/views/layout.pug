@@ -4,6 +4,7 @@ html
     title NoWaste
     link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
     link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
+    link(rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png")
     script(src="https://cdn.jsdelivr.net/npm/flatpickr")
     script(src="https://unpkg.com/htmx.org@1.8.4")
     script.
@@ -36,7 +37,8 @@ html
               btnDerecha.addEventListener("click", () => {
                   currentIndex = (currentIndex < slideCount - 1) ? currentIndex + 1 : 0;
                   const translateX = -currentIndex * slideWidth;
-                  slides.style.transform = `translateX(${translateX}px)`;              });
+                  slides.style.transform = `translateX(${translateX}px)`;
+                  });
           });
       });
     block head

@@ -7,7 +7,8 @@ class sidebarModel {
         this.#content.items = []
     }
 
-    addItem(title, requestURL, target, id=null){
+    addItem(title, requestURL, target, id, deletable){
+        console.log(deletable)
         let item = {
             "title": title,
             "requestURL": requestURL,
@@ -16,7 +17,8 @@ class sidebarModel {
         if (id){
             item.id = id
         }
-        
+        item.deletable = deletable
+        // console.log(item)
         this.#content.items.push(item)
     }
 
@@ -25,12 +27,15 @@ class sidebarModel {
     }
 }
 
-async function sidebarRestaurantes(baseURL) {
+async function sidebarRestaurantes(baseURL, deletable="false") {
     const restaurantes = await restauranteModel.find().exec()
     const sidebar = new sidebarModel('Lista de comercios')
-  
-    restaurantes.forEach((restaurante) => sidebar.addItem(restaurante.nombre, `${baseURL}/show/${restaurante._id}`, "#content", restaurante._id.toString()))
-
+    console.log(deletable)
+    restaurantes.forEach((restaurante) => sidebar.addItem(  restaurante.nombre, 
+                                                            `${baseURL}/show/${restaurante._id}`, 
+                                                            "#content", restaurante._id.toString(),
+                                                            deletable,
+                                                        ))
     return sidebar.sidebar
 }
 

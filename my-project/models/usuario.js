@@ -25,5 +25,5 @@ usuarioSchema.methods.validar = async function(password)  {
   return await bcrypt.compare(password,this.password) 
 }
 
-// Export function to create "Restaurante" model class
+// Export function to create "Usuario" model class
 module.exports = mongoose.model('usuario', usuarioSchema)

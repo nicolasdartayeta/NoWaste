@@ -21,5 +21,8 @@ router.route('/listadoProductos')
 
 router.route('/compra/:restauranteId/:productoId')
   .post(userController.comprar_producto)
-  
+
+router.route('/mapa')
+  .get(userController.mapa)
+  //.post(userController.localizacion)
 module.exports = router;
