@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title NoWaste
+    link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
+    //link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
+    //script(src="https://cdn.jsdelivr.net/npm/flatpickr")
+    link(rel='stylesheet', href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', integrity='sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=', crossorigin='')
+    script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
+    script(src="https://unpkg.com/htmx.org@1.8.4")
+    block head
+  body
+    div(class='flex flex-col h-screen w-screen overflow-auto')
+
+        div(class='flex flex-col h-100 w-100 overflow-auto')
+        section#map(style="height: 100%; width: 100%; position: relative;")
+            h1(class='absolute bottom-0 right-0') Arrastar ubicacion
+            button(hx-get="/user" 
+                class='absolute bottom-5 right-5 rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen' 
+                style='z-index: 1000'
+                hx-vals="js:{ lat: mark.getLatLng().lat, lng: mark.getLatLng().lng }") save
+    script(src="/helpers/map.js")

@@ -4,7 +4,7 @@ const productoModel = require('../models/producto')
 const http = require('http')
 const multer = require('multer')
 const sidebarHelper = require('../helpers/sidebar.js')
-const obtenerCiudad = require('../helpers/obtenerCiudad.js')
+const obtenerCiudadl = require('../helpers/obtenerCiudad.js')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
@@ -22,13 +22,19 @@ const baseURL = '/user'
 exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
-  res.appendHeader('HX-Redirect', '/user')
-  const ip = String(req.connection.remoteAddress)
-  try{
-    if (!ip.startsWith('::ffff:')){         //condicion debido a tener hosteado en el docker local
-      data = await obtenerCiudad('ip')
-      req.session.city = data.city}
-    else{ req.session.city = 'Tandil'}
+  const { lat, lng } = req.query
+  console.log(req.query)
+  let template
+  if (lat && lng) {
+    data = await obtenerCiudadl(lat, lng).then()
+    req.session.lat=lat;
+    req.session.long=lng;
+    req.session.city = data
+    console.log('Location received:',req.session.city)
+  }
+  if ( req.session.lat & req.session.long) {
+    res.appendHeader('HX-Redirect', '/user')
+    console.log('Location received:', req.session.lat, req.session.long)
 
     const productosConNombreRestaurante = await productoModel.aggregate([ //seria un join en mongoDB
       {
@@ -54,20 +60,15 @@ exports.home = asyncHandler(async (req, res, next) => {
           }
       }]);
     
-    let template
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxListRestaurante'
     } else {
       template = 'usuarios/usuariosHome'
     }
     res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: req.session.city})
-  }catch (error) {
-    if (req.headers['hx-request']) {
-      template = 'restaurantes/htmxListRestaurante'
-    } else {
-      template = 'usuarios/usuariosHome'
-    }
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: 'Tandil'})
+  }else{
+    res.appendHeader('HX-Redirect', '/user/mapa')
+    res.render('usuarios/mapa')
   }
 })
 
@@ -129,3 +130,13 @@ exports.comprar_producto = asyncHandler(async (req, res, next) => {
   }
 })
 
+exports.mapa = asyncHandler(async (req, res, next) => {
+  res.appendHeader('HX-Redirect', '/user/mapa')
+  let template
+  if (req.headers['hx-request']) {
+    template = 'usuarios/mapa'
+  } else {
+    template = 'usuarios/mapa'// ERROR
+  }
+  res.render(template)
+})

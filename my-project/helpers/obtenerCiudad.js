@@ -1,36 +1,20 @@
-function obtenerCiudad(ip) {
+function obtenerCiudadl(lat,lng) {
+    let key = process.env.APIKEY_LOCATIONIQ;
+    const apiUrl = `https://us1.locationiq.com/v1/reverse?key=${key}&lat=${lat}&lon=${lng}&format=json&`;
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
+
     return new Promise((resolve, reject) => {
-      // Opciones de la solicitud, construyendo la URL con la IP
-      const options = {
-        hostname: 'ip-api.com',
-        port: 80,
-        path: `/json/190.246.97.123`,
-        method: 'GET'
-      };
-  
-      const req = http.request(options, (res) => {
-        let responseData = '';
-  
-        res.on('data', (chunk) => {
-          responseData += chunk;
-        });
-  
-        res.on('end', () => {
-          try {
-            const parsedData = JSON.parse(responseData);
-            resolve(parsedData);
-          } catch (e) {
-            reject(e);
+      fetch(apiUrl, options)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.address && data.address.city) {
+            resolve(data.address.city);
+          } else {
+            reject('No se pudo obtener la ciudad de la respuesta.');
           }
-        });
-      });
-  
-      req.on('error', (error) => {
-        reject(error);
-      });
-  
-      req.end();
+        })
+        .catch(err => reject(err));
     });
 }
 
-module.exports = obtenerCiudad
+module.exports = obtenerCiudadl

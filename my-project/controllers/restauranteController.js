@@ -55,7 +55,7 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
   } else {
     template = 'restaurantes/listRestaurantes'
   }
-  res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL) })
+  res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL,"true") })
 })
 
 // ACTUALIZADO
@@ -101,7 +101,7 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
     const productos = await productoModel.find({ restauranteID: restaurante._id }).lean();
     let template
     const parametros = { 
-      sidebar: await sidebarHelper.sidebarRestaurantes(baseURL),
+      sidebar: await sidebarHelper.sidebarRestaurantes(baseURL,"true"),
       baseURL, title: 'Lista de restaurantes',datos: restaurante,productos } //creo que nombre y la lista no son necesarios
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
@@ -114,11 +114,11 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
     res.redirect(baseURL + '/show')
   }
 })
+
 // ACTUALIZADO
 exports.add_product = asyncHandler(async (req, res, next) => {
   const restauranteId = req.params.restauranteId
   const restaurante = await restauranteModel.findById(restauranteId).lean()
-  const nombreRestaurante = restaurante.nombre
 
   let template
   const parametros = { baseURL,restauranteId, datos: restaurante }

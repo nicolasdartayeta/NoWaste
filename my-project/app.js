@@ -39,7 +39,7 @@ if (process.env.DB_MODE === 'local') {
       await mongoose.connect(process.env.MONGODB_URI_CLOUD, clientOptions);
       await mongoose.connection.db.admin().command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
+    } catch (err){
       console.log("Algo salio mal al conectarse a la base de datos en la nube");
     }
   }
@@ -56,6 +56,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser(''))
 app.use('/static', express.static(path.join(__dirname, 'public')))
+app.use('/helpers', express.static(path.join(__dirname, 'helpers')))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(session({
   secret: 'keyboard cat',
