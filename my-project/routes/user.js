@@ -19,7 +19,7 @@ router.route('/show/:restauranteId')
 router.route('/listadoProductos')
   .get(userController.listado_productos)
 
-router.route('/compra/:restauranteId/:productoId')
+router.route('/compra/:productoId')
   .post(userController.comprar_producto)
 
 router.route('/mapa')

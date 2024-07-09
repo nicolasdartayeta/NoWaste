@@ -1,9 +1,10 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
-const { unlink } = require('node:fs/promises')
+const productoModel = require('../models/producto')
 const http = require('http')
 const multer = require('multer')
 const sidebarHelper = require('../helpers/sidebar.js')
+const obtenerCiudadl = require('../helpers/obtenerCiudad.js')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
@@ -22,7 +23,6 @@ exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
   const { lat, lng } = req.query
-  console.log(req.query)
   let template
   if (lat && lng) {
     data = await obtenerCiudadl(lat, lng).then()
@@ -34,13 +34,38 @@ exports.home = asyncHandler(async (req, res, next) => {
   if ( req.session.lat & req.session.long) {
     res.appendHeader('HX-Redirect', '/user')
     console.log('Location received:', req.session.lat, req.session.long)
+
+    const productosConNombreRestaurante = await productoModel.aggregate([ //seria un join en mongoDB
+      {
+          $lookup: {
+              from: 'restaurantes', // Nombre de la colección con la que se quiere hacer el join
+              localField: 'restauranteID', //atributo de la colección de productos que se utiliza para el join
+              foreignField: '_id', //atributo de la colección de restaurantes que se utiliza para el join
+              as: 'restaurante' //nombre del campo en el resultado del join
+          }
+      },
+      {
+          $unwind: '$restaurante' // Deshacer el array resultante del lookup
+      },
+      {
+          $project: { // seleccionar los campos que se quieren mostrar
+              _id: 1,
+              nombre: 1,
+              descripcion: 1,
+              precio: 1,
+              stock: 1,
+              imagenesProducto: 1,
+              restauranteId: '$restaurante._id',
+              restauranteNombre: '$restaurante.nombre'
+          }
+      }]);
+    
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxListRestaurante'
     } else {
       template = 'usuarios/usuariosHome'
     }
-    const restaurantes = await restauranteModel.find().exec()
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: req.session.city})
+    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: req.session.city})
   }else{
     res.appendHeader('HX-Redirect', '/user/mapa')
     res.render('usuarios/mapa')
@@ -52,7 +77,6 @@ exports.busqueda = asyncHandler(async (req, res, next) => {
   const sidebar = new sidebarHelper.Sidebar('Lista de comercios')
 
   for (const restaurante of restaurantes) {
-    console.log(restaurante)
     sidebar.addItem(restaurante.nombre, `/user/show/${restaurante._id}`, '#content')
   }
   res.render('restaurantes/htmxListRestaurante', {sidebar: sidebar.sidebar})
@@ -60,12 +84,10 @@ exports.busqueda = asyncHandler(async (req, res, next) => {
 
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
-
   if (restaurante) {
-    const nombreRestaurante = restaurante.nombre
-    const restaurantes = await restauranteModel.find().exec()
+    const productos = await productoModel.find({ restauranteID: restaurante._id }).lean();
     let template
-    const parametros = { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
+    const parametros = { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', datos: restaurante, productos }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
@@ -78,7 +100,7 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
   }
 })
 
-exports.listado_productos = asyncHandler(async (req, res, next) => {
+exports.listado_productos = asyncHandler(async (req, res, next) => { //CREO QUE NO SE USA, NI LA RUTA
   const restaurantes = await restauranteModel.find().exec()
   let template
   if (req.headers['hx-request']) {
@@ -90,25 +112,20 @@ exports.listado_productos = asyncHandler(async (req, res, next) => {
 })
 
 exports.comprar_producto = asyncHandler(async (req, res, next) => {
-  const restaurante = await restauranteModel.findById(req.params.restauranteId)
-  if (restaurante){
-    const producto = await restaurante.producto.id(req.params.productoId)   //busca el produto con el metodo .id()
-    if (producto){ 
-      if (producto.stock === 0 || producto.stock === null){
-        res.status(400).send('El producto esta fuera de stock')
-      }
-      const cantidadCompra = parseInt(req.body.cantidad)
-      if (cantidadCompra <= 0 || cantidadCompra > producto.stock) {
-        return res.status(400).send('Cantidad inválida o supera el stock disponible');
-      }
-      producto.stock -= cantidadCompra;
-      await restaurante.save()
-      res.redirect(`/user`)       //luego al implementar el pago y demas cambiar esto
-    }else{
-      res.status(404).send('Producto no encontrado')
+  const producto = await productoModel.findById(req.params.productoId)   //busca el produto con el metodo .id()
+  if (producto){ 
+    if (producto.stock === 0 || producto.stock === null){
+      res.status(400).send('El producto esta fuera de stock')
     }
+    const cantidadCompra = parseInt(req.body.cantidad)
+    if (cantidadCompra <= 0 || cantidadCompra > producto.stock) {
+      return res.status(400).send('Cantidad inválida o supera el stock disponible');
+    }
+    producto.stock -= cantidadCompra;
+    await producto.save()
+    res.redirect(`/user`)       //luego al implementar el pago y demas cambiar esto
   }else{
-    res.status(404).send('Restaurante no encontrado')
+    res.status(404).send('Producto no encontrado')
   }
 })
 
@@ -122,23 +139,3 @@ exports.mapa = asyncHandler(async (req, res, next) => {
   }
   res.render(template)
 })
-
-function obtenerCiudadl(lat,lng) {
-    let key = process.env.APIKEY_LOCATIONIQ;
-    const apiUrl = `https://us1.locationiq.com/v1/reverse?key=${key}&lat=${lat}&lon=${lng}&format=json&`;
-    const options = {method: 'GET', headers: {accept: 'application/json'}};
-
-    
-    return new Promise((resolve, reject) => {
-      fetch(apiUrl, options)
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.address && data.address.city) {
-            resolve(data.address.city);
-          } else {
-            reject('No se pudo obtener la ciudad de la respuesta.');
-          }
-        })
-        .catch(err => reject(err));
-    });
-}
