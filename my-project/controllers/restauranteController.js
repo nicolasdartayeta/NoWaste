@@ -54,7 +54,7 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
   } else {
     template = 'restaurantes/listRestaurantes'
   }
-  console.log("HOLAA")
+
   res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL, "true") })
 })
 
@@ -225,6 +225,9 @@ exports.edit_product_post = asyncHandler(async (req, res, next) => {
 exports.delete_producto = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).exec()
   const productoIndex = restaurante.producto.findIndex(producto => producto.nombre == req.params.nombreProducto)
+  
+  console.log(restaurante)
+  console.log(productoIndex)
 
   for (imagen of restaurante.producto[productoIndex].imagenesProducto) {
     try {
@@ -270,7 +273,6 @@ exports.restaurante_delete = asyncHandler(async (req, res, next) => {
   const response = await restauranteModel.deleteOne({ _id: req.params.restauranteId }).exec()
 
   const urlActual = req.get('HX-Current-URL')
-  console.log('ju')
 
   const partesURL = urlActual.split('/')
   const restauranteIdURL = partesURL[partesURL.length - 1]
