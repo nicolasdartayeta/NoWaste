@@ -22,7 +22,6 @@ exports.imageUploader = multer({ storage })
 
 exports.home = asyncHandler(async (req, res, next) => {
   const { lat, lng } = req.query
-  console.log(req.query)
   let template
   if (lat && lng) {
     data = await obtenerCiudadl(lat, lng).then()
@@ -52,7 +51,6 @@ exports.busqueda = asyncHandler(async (req, res, next) => {
   const sidebar = new sidebarHelper.Sidebar('Lista de comercios')
 
   for (const restaurante of restaurantes) {
-    console.log(restaurante)
     sidebar.addItem(restaurante.nombre, `/user/show/${restaurante._id}`, '#content')
   }
   res.render('restaurantes/htmxListRestaurante', {sidebar: sidebar.sidebar})
