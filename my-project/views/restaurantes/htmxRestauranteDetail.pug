@@ -24,7 +24,7 @@ div(id=datos._id)
                                                     img(src="/static/icons/edit.png" alt="edit")
                                                 button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+valor hx-target="closest li" hx-swap='outerHTML') 
                                                     img(src="/static/icons/trash.png" alt="delete")
-                                else if (atributo != '_id')  
+                                else if (atributo == 'imagenesProducto')  
                                     .slider
                                         button#btn-derecha
                                             img(src="/static/icons/arrow_right.png" alt=">")
