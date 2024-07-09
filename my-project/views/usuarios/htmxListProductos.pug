@@ -4,27 +4,42 @@ div(class='flex flex-col items-center justify-center p-4 w-full')
     if productos.length 
         div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")      
                 each producto in productos
-                    div
-                        ul
-                            p Local: #{producto.restauranteNombre}
-                            p Nombre: #{producto.nombre}
-                            p Descripción: #{producto.descripcion}
-                            p Precio: #{producto.precio}
-                            P Stock: #{producto.stock}
-                            .slider
-                                button#btn-derecha
-                                    img(src="/static/icons/arrow_right.png" alt=">")
-                                button#btn-izquierda()
-                                    img(src="/static/icons/arrow_left.png" alt="<")
-                                .slides
-                                    each imagen in producto.imagenesProducto
-                                        .slide
-                                            #contenedor-img
-                                                img#img-producto(src=`/static/images/${imagen.id}`, onerror="this.remove()")
-                            if (producto.stock > 0)
-                                form(action=`/user/compra/${producto._id}`, method="POST")
-                                    label(for=`cantidad-${producto._id}`) Cantidad:
-                                    input(type="number", id=`cantidad-${producto._id}`, name=`cantidad`, min="1", max=producto.stock, value="1")
-                                    button(onclick=`log(${producto.stock})` type="submit" class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar 
+                    if producto.stock > 0
+                        div
+                            ul
+                                p Local: #{producto.restauranteNombre}
+                                p Nombre: #{producto.nombre}
+                                p Descripción: #{producto.descripcion}
+                                p Precio: #{producto.precio}
+                                P Stock: #{producto.stock}
+                                section(class="container")
+                                    div.slider-wrapper
+                                        - let counter = 0
+                                        div.slider-nav
+                                            each imagen in producto.imagenesProducto
+                                                a(href = '#img_'+ imagen.id +(counter++))
+                                        - counter = 0
+                                        div.slider
+                                            each imagen in producto.imagenesProducto
+                                                img(id='img_'+ imagen.id+(counter++) src='/static/images/'+imagen.id onerror="this.remove()")
+
+                                if (producto.stock > 0)
+                                    form(action=`/user/compra/${producto._id}`, method="POST")
+                                        label(for=`cantidad-${producto._id}`) Cantidad:
+                                        input(type="number", id=`cantidad-${producto._id}`, name=`cantidad`, min="1", max=producto.stock, value="1")
+                                        button(onclick=`log(${producto.stock})` type="submit" class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar 
+                    else
+                        script.
+                            async function deleteProduct(restauranteId, productoId) {
+                                console.log(restauranteId)
+                                try {
+                                    const response = await fetch(`/admin/restaurantes/${restauranteId}/deleteProduct/${productoId}`, {
+                                        method: 'delete'
+                                    });
+                                } catch (error) {
+                                    console.error(`Error en la solicitud de eliminación: ${error}`);
+                                }
+                            };
+                            deleteProduct(`#{producto.restauranteId}`, `#{producto._id}`)
     else                                
         p No hay productos disponibles

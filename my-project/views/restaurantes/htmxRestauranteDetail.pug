@@ -25,17 +25,16 @@ div(id=datos._id)
                                                 button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+producto._id hx-target="closest li" hx-swap='outerHTML') 
                                                     img(src="/static/icons/trash.png" alt="delete")
                                 else if (atributo == 'imagenesProducto')  
-                                    .slider
-                                        button#btn-derecha
-                                            img(src="/static/icons/arrow_right.png" alt=">")
-                                        button#btn-izquierda() 
-                                            img(src="/static/icons/arrow_left.png" alt="<")
-                                        .slides
+                                    section(class="container")
+                                        div.slider-wrapper
+                                            - let counter = 0
+                                            div.slider-nav
                                                 each imagen in valor
-                                                    .slide
-                                                        #contenedor-img
-                                                            img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
-                                                        
+                                                    a(href = '#img_'+ imagen.id +(counter++))
+                                            - counter = 0
+                                            div.slider
+                                                each imagen in valor
+                                                    img(id='img_'+ imagen.id+(counter++) src='/static/images/'+imagen.id onerror="this.remove()")
             else 
                 p Este restaurante no tiene productos
     else 
