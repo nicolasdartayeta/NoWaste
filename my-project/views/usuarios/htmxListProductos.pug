@@ -11,16 +11,17 @@ div(class='flex flex-col items-center justify-center p-4 w-full')
                             p Local: #{restaurante.nombre}
                             each valor, atributo in producto
                                 if (atributo == 'imagenesProducto')
-                                    .slider
-                                        button#btn-derecha
-                                            img(src="/static/icons/arrow_right.png" alt=">")
-                                        button#btn-izquierda() 
-                                            img(src="/static/icons/arrow_left.png" alt="<")
-                                        .slides
-                                            each imagen in valor
-                                                .slide
-                                                    #contenedor-img
-                                                        img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
+                                    section(class="container")
+                                        div.slider-wrapper
+                                            - let counter = 0
+                                            div.slider-nav
+                                                each imagen in valor
+                                                    a(href = '#img_'+ imagen.id +(counter++))
+                                            - counter = 0
+                                            div.slider
+                                                each imagen in valor
+                                                    img(id='img_'+ imagen.id+(counter++) src='/static/images/'+imagen.id onerror="this.remove()")
+                                            
                                 else
                                     if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'stock')
                                         p #{atributo}: #{valor}

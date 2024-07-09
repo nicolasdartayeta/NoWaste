@@ -3,6 +3,8 @@ html
   head
     title NoWaste
     link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
+    //no saquen estos estilos porque se usan para el carrusel
+    link(rel='stylesheet', href='/static/stylesheets/styleRestaurante.css')
     link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
     link(rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png")
     script(src="https://cdn.jsdelivr.net/npm/flatpickr")
@@ -15,32 +17,6 @@ html
       function limpiarContent() {
         document.getElementById('content').innerHTML = "<p>Elegi un restaurante!</p>"
       }
-    script.
-      document.addEventListener("DOMContentLoaded", () => {
-          const sliders = document.querySelectorAll ('.slider');
-          sliders.forEach((slider, index) => {
-              const slides = slider.querySelector('.slides');
-              console.log(slider);
-              const slideCount = slides.childElementCount;
-              const btnIzquierda = slider.querySelector("#btn-izquierda");
-              console.log(btnIzquierda);
-              const btnDerecha = slider.querySelector("#btn-derecha");
-              let currentIndex = 0;
-              const slideWidth = slides.children[0].offsetWidth; // Ancho de cada diapositiva
-              const percentage = 100;
-              btnIzquierda.addEventListener("click", () => {
-                  currentIndex = (currentIndex > 0) ? currentIndex - 1 : slideCount - 1;
-                  const translateX = -currentIndex * slideWidth;
-                  slides.style.transform = `translateX(${translateX}px)`;
-              });
-
-              btnDerecha.addEventListener("click", () => {
-                  currentIndex = (currentIndex < slideCount - 1) ? currentIndex + 1 : 0;
-                  const translateX = -currentIndex * slideWidth;
-                  slides.style.transform = `translateX(${translateX}px)`;
-                  });
-          });
-      });
     block head
   body
     div(class='flex flex-col h-screen w-screen overflow-auto')
