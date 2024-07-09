@@ -1,9 +1,10 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
-const { unlink } = require('node:fs/promises')
+const productoModel = require('../models/producto')
 const http = require('http')
 const multer = require('multer')
 const sidebarHelper = require('../helpers/sidebar.js')
+const obtenerCiudad = require('../helpers/obtenerCiudad.js')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { // CHECK SI ESTA LA CARPETA O NO
@@ -29,21 +30,44 @@ exports.home = asyncHandler(async (req, res, next) => {
       req.session.city = data.city}
     else{ req.session.city = 'Tandil'}
 
-    const restaurantes = await restauranteModel.find().exec()
+    const productosConNombreRestaurante = await productoModel.aggregate([ //seria un join en mongoDB
+      {
+          $lookup: {
+              from: 'restaurantes', // Nombre de la colección con la que se quiere hacer el join
+              localField: 'restauranteID', //atributo de la colección de productos que se utiliza para el join
+              foreignField: '_id', //atributo de la colección de restaurantes que se utiliza para el join
+              as: 'restaurante' //nombre del campo en el resultado del join
+          }
+      },
+      {
+          $unwind: '$restaurante' // Deshacer el array resultante del lookup
+      },
+      {
+          $project: { // seleccionar los campos que se quieren mostrar
+              _id: 1,
+              nombre: 1,
+              descripcion: 1,
+              precio: 1,
+              stock: 1,
+              imagenesProducto: 1,
+              restauranteNombre: '$restaurante.nombre'
+          }
+      }]);
+    
     let template
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxListRestaurante'
     } else {
       template = 'usuarios/usuariosHome'
     }
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: req.session.city})
+    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: req.session.city})
   }catch (error) {
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxListRestaurante'
     } else {
       template = 'usuarios/usuariosHome'
     }
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, ciudad: 'Tandil'})
+    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: 'Tandil'})
   }
 })
 
@@ -60,12 +84,10 @@ exports.busqueda = asyncHandler(async (req, res, next) => {
 
 exports.restaurante_list = asyncHandler(async (req, res, next) => {
   const restaurante = await restauranteModel.findById(req.params.restauranteId).lean()
-
   if (restaurante) {
-    const nombreRestaurante = restaurante.nombre
-    const restaurantes = await restauranteModel.find().exec()
+    const productos = await productoModel.find({ restauranteID: restaurante._id }).lean();
     let template
-    const parametros = { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', restaurantesList: restaurantes, nombre: nombreRestaurante, datos: restaurante }
+    const parametros = { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', datos: restaurante, productos }
     if (req.headers['hx-request']) {
       template = 'restaurantes/htmxRestauranteDetail'
     } else {
@@ -78,7 +100,7 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
   }
 })
 
-exports.listado_productos = asyncHandler(async (req, res, next) => {
+exports.listado_productos = asyncHandler(async (req, res, next) => { //CREO QUE NO SE USA, NI LA RUTA
   const restaurantes = await restauranteModel.find().exec()
   let template
   if (req.headers['hx-request']) {
@@ -90,60 +112,20 @@ exports.listado_productos = asyncHandler(async (req, res, next) => {
 })
 
 exports.comprar_producto = asyncHandler(async (req, res, next) => {
-  const restaurante = await restauranteModel.findById(req.params.restauranteId)
-  if (restaurante){
-    const producto = await restaurante.producto.id(req.params.productoId)   //busca el produto con el metodo .id()
-    if (producto){ 
-      if (producto.stock === 0 || producto.stock === null){
-        res.status(400).send('El producto esta fuera de stock')
-      }
-      const cantidadCompra = parseInt(req.body.cantidad)
-      if (cantidadCompra <= 0 || cantidadCompra > producto.stock) {
-        return res.status(400).send('Cantidad inválida o supera el stock disponible');
-      }
-      producto.stock -= cantidadCompra;
-      await restaurante.save()
-      res.redirect(`/user`)       //luego al implementar el pago y demas cambiar esto
-    }else{
-      res.status(404).send('Producto no encontrado')
+  const producto = await productoModel.findById(req.params.productoId)   //busca el produto con el metodo .id()
+  if (producto){ 
+    if (producto.stock === 0 || producto.stock === null){
+      res.status(400).send('El producto esta fuera de stock')
     }
+    const cantidadCompra = parseInt(req.body.cantidad)
+    if (cantidadCompra <= 0 || cantidadCompra > producto.stock) {
+      return res.status(400).send('Cantidad inválida o supera el stock disponible');
+    }
+    producto.stock -= cantidadCompra;
+    await producto.save()
+    res.redirect(`/user`)       //luego al implementar el pago y demas cambiar esto
   }else{
-    res.status(404).send('Restaurante no encontrado')
+    res.status(404).send('Producto no encontrado')
   }
 })
 
-
-function obtenerCiudad(ip) {
-  return new Promise((resolve, reject) => {
-    // Opciones de la solicitud, construyendo la URL con la IP
-    const options = {
-      hostname: 'ip-api.com',
-      port: 80,
-      path: `/json/190.246.97.123`,
-      method: 'GET'
-    };
-
-    const req = http.request(options, (res) => {
-      let responseData = '';
-
-      res.on('data', (chunk) => {
-        responseData += chunk;
-      });
-
-      res.on('end', () => {
-        try {
-          const parsedData = JSON.parse(responseData);
-          resolve(parsedData);
-        } catch (e) {
-          reject(e);
-        }
-      });
-    });
-
-    req.on('error', (error) => {
-      reject(error);
-    });
-
-    req.end();
-  });
-}

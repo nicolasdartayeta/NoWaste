@@ -1,35 +1,28 @@
 div(class='flex flex-col items-center justify-center p-4 w-full')    
     p(class='text-2xl font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Productos
     
-    if restaurantesList.length 
-        div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
-            each restaurante in restaurantesList
-                //if restaurante.ciudad == ciudad      si lo dejas no muestra productos en /user              
-                each producto in restaurante.producto
+    if productos.length 
+        div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")      
+                each producto in productos
                     div
                         ul
-                            p Local: #{restaurante.nombre}
-                            each valor, atributo in producto
-                                if (atributo == 'imagenesProducto')
-                                    .slider
-                                        button#btn-derecha
-                                            img(src="/static/icons/arrow_right.png" alt=">")
-                                        button#btn-izquierda() 
-                                            img(src="/static/icons/arrow_left.png" alt="<")
-                                        .slides
-                                            each imagen in valor
-                                                .slide
-                                                    #contenedor-img
-                                                        img#img-producto(src='/static/images/'+imagen.id onerror="this.remove()")
-                                else
-                                    if (atributo == 'nombre') || (atributo == 'precio') || (atributo == 'descripcion') || (atributo == 'stock')
-                                        p #{atributo}: #{valor}
-                            script. 
-                                function log(m) {
-                                    console.log(m);
-                                };
+                            p Local: #{producto.restauranteNombre}
+                            p Nombre: #{producto.nombre}
+                            p Descripción: #{producto.descripcion}
+                            p Precio: #{producto.precio}
+                            P Stock: #{producto.stock}
+                            .slider
+                                button#btn-derecha
+                                    img(src="/static/icons/arrow_right.png" alt=">")
+                                button#btn-izquierda()
+                                    img(src="/static/icons/arrow_left.png" alt="<")
+                                .slides
+                                    each imagen in producto.imagenesProducto
+                                        .slide
+                                            #contenedor-img
+                                                img#img-producto(src=`/static/images/${imagen.id}`, onerror="this.remove()")
                             if (producto.stock > 0)
-                                form(action=`/user/compra/${restaurante._id}/${producto._id}`, method="POST")
+                                form(action=`/user/compra/${producto._id}`, method="POST")
                                     label(for=`cantidad-${producto._id}`) Cantidad:
                                     input(type="number", id=`cantidad-${producto._id}`, name=`cantidad`, min="1", max=producto.stock, value="1")
                                     button(onclick=`log(${producto.stock})` type="submit" class="w-full block rounded-lg px-4 py-2 text-sm text-center font-medium bg-green-900/30 hover:bg-green-800/30 hover:text-gray-100") Comprar 

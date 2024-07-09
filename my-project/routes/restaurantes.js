@@ -29,11 +29,11 @@ router.route('/:restauranteId/addProduct')
   .get(restauranteController.add_product) 
   .post(restauranteController.imageUploader.array('imagenProducto'), restauranteController.add_product_post)
 
-router.route('/:restauranteId/editProduct')
+router.route('/:restauranteId/edit/:productoId')
   .get(restauranteController.edit_product) 
   .post(restauranteController.edit_product_post)
 
-router.route('/:restauranteId/deleteProduct/:nombreProducto') 
+router.route('/:restauranteId/deleteProduct/:productoId') 
   .delete(restauranteController.delete_producto)
 
 module.exports = router;
