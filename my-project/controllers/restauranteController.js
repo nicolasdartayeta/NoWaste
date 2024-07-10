@@ -1,10 +1,9 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
-const productoModel = require('../models/producto')
+const {productoModel, tiposProductos} = require('../models/producto')
 const { unlink } = require('node:fs/promises')
 const nodemailer = require('nodemailer');
 const multer = require('multer')
-
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -119,7 +118,6 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
 exports.add_product = asyncHandler(async (req, res, next) => {
   const restauranteId = req.params.restauranteId
   const restaurante = await restauranteModel.findById(restauranteId).lean()
-  const tiposProductos = ["Hamburguesa", "Pizza", "Sandwich", "Sopa", "Plato", "Torta", "Pan", "Frutas", "Verduras", "Otros"]
   let template
   const parametros = { baseURL,restauranteId, datos: restaurante, tiposProductos}
 

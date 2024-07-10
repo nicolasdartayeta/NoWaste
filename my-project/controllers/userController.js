@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
-const productoModel = require('../models/producto')
+const {productoModel, tiposProductos} = require('../models/producto')
 const http = require('http')
 const multer = require('multer')
 const sidebarHelper = require('../helpers/sidebar.js')
@@ -66,7 +66,7 @@ exports.home = asyncHandler(async (req, res, next) => {
     } else {
       template = 'usuarios/usuariosHome'
     }
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: req.session.city})
+    res.render(template, { tiposProductos, sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: req.session.city})
   }else{
     res.appendHeader('HX-Redirect', '/user/mapa')
     res.render('usuarios/mapa')
