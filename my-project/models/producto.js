@@ -8,6 +8,7 @@ const productoSchema = new Schema({
     descripcion: String,
     precio: Number,
     fecha_caducidad: String,
+    tipoProducto: String,
     stock: {
         type: Number,
         validate: {
@@ -21,8 +22,8 @@ const productoSchema = new Schema({
     restauranteID:{
         type: Schema.Types.ObjectId,
         ref: "restaurante",
-        required: true
-    }
+        required: true,
+    },
 })
 
   
