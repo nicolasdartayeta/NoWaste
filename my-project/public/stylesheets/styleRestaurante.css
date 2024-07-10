@@ -77,3 +77,7 @@ ul.listaProductos {
     height: 500px; /* Adjust to the height of your fixed header, if any */
     margin-top: -500px; /* Adjust to the height of your fixed header, if any */
 }
+
+.slider::-webkit-scrollbar {
+	display: none;
+}
