@@ -54,6 +54,7 @@ exports.home = asyncHandler(async (req, res, next) => {
               descripcion: 1,
               precio: 1,
               stock: 1,
+              tipoProducto: 1,
               imagenesProducto: 1,
               restauranteId: '$restaurante._id',
               restauranteNombre: '$restaurante.nombre'

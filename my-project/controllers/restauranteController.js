@@ -119,9 +119,9 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
 exports.add_product = asyncHandler(async (req, res, next) => {
   const restauranteId = req.params.restauranteId
   const restaurante = await restauranteModel.findById(restauranteId).lean()
-
+  const tiposProductos = ["Hamburguesa", "Pizza", "Sandwich", "Sopa", "Plato", "Torta", "Pan", "Frutas", "Verduras", "Otros"]
   let template
-  const parametros = { baseURL,restauranteId, datos: restaurante }
+  const parametros = { baseURL,restauranteId, datos: restaurante, tiposProductos}
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddProduct'
@@ -147,6 +147,7 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
         precio: req.body.precio,
         fecha_caducidad: req.body.fecha_caducidad,
         stock: req.body.stock,
+        tipoProducto: req.body.tipoProducto,
         imagenesProducto: req.files.map(file => ({ id: file.filename })),
         restauranteID: restaurante._id
       });
