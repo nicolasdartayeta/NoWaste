@@ -5,6 +5,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        transparent: 'transparent',
+        current: 'currentColor',
         customGray: '#E7EBE5',
         customGreen: '#516244',
         customSimilar4: '#c3d5ca',
