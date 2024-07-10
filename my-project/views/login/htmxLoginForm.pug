@@ -3,6 +3,7 @@ html
     title Login
     link(rel='stylesheet', href='/static/stylesheets/outputTailwind.css')
     script(src="https://unpkg.com/htmx.org@1.8.4")
+    meta(name="viewport" content=" width=device-width, initial-scale=1.0 ")
 
   body(class='flex justify-center text-center items-center min-h-screen bg-gradient-to-br from-lime-300 to-green-900')
     div(class='bg-customGray p-8 rounded-2xl shadow-2xl')
@@ -17,10 +18,10 @@ html
             input(type='password', placeholder='Ingrese contraseña' name='password' required class='w-full px-3 py-2 border rounded-lg')
           div
             div(class='flex space-x-2 py-2')
-                button(type='submit' class='w-full py-2 bg-customGreen text-white rounded-lg') Iniciar sesión
-                button(type='button' onclick="window.location.href='/login/register'" class='w-full py-2 bg-gray-200 border border-customGreen text-customGreen rounded-lg') Registrarse
+                button(type='submit' class='w-full py-2 bg-customGreen text-white rounded-lg hover:scale-105 border border-customGreen hover:bg-gray-200 hover:text-customGreen duration-300') Iniciar sesión
+                button(type='button' onclick="window.location.href='/login/register'" class='w-full py-2 bg-gray-200 border border-customGreen text-customGreen rounded-lg hover:bg-customGreen hover:text-white hover:scale-105 duration-300') Registrarse
             div(class='flex w-full my-2 bg-white text-black px-4 py-2 rounded-lg')
               div(class='flex-auto flex items-center justify-center')
                 img(src='/static/icons/google_logo.png' class='w-6')
               div(class='flex-auto flex items-center')
-                a(href="/login/auth/google" class='') Iniciar sesión con Google
+                a(href="/login/auth/google" class='hover:scale-105 duration-300') Iniciar sesión con Google
