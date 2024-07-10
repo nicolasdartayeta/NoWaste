@@ -26,7 +26,7 @@ const productoSchema = new Schema({
     },
 })
 
-const tiposProductos = ["Hamburguesa", "Pizza", "Sandwich", "Sopa", "Plato", "Torta", "Pan", "Frutas", "Verduras", "Otros"]
+const tiposProductos = ["Hamburguesa", "Tarta", "Milanesa", "Helado", "Pizza", "Sandwich", "Sopa", "Torta", "Pan", "Frutas", "Verduras", "Otros"]
 
   
   // Export function to create "Producto" model class
