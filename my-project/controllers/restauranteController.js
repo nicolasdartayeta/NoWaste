@@ -159,10 +159,10 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
       const correos = usuarios.map(usuario => usuario.email);
 
       const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `"NoWaste" <${process.env.EMAIL_USER}>`,
         to: correos,
         subject: 'Nuevo Producto Añadido!',
-        text: `${restaurante.nombre} ha añadido un nuevo producto: ${nuevoProducto.nombre}`
+        text: `${restaurante.nombre} ha añadido: ${nuevoProducto.nombre} a $${nuevoProducto.precio}`
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
