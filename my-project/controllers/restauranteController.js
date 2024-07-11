@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
+const usuarioModel = require('../models/usuario')
 const {productoModel, tiposProductos} = require('../models/producto')
 const { unlink } = require('node:fs/promises')
 const nodemailer = require('nodemailer');
@@ -152,10 +153,14 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
 
       await nuevoProducto.save()
 
-      //Envia mensaje por mail, (Nodemailer)  
+      //Envia mensaje por mail, (Nodemailer)
+
+      const usuarios = await usuarioModel.find().select('email').exec();
+      const correos = usuarios.map(usuario => usuario.email);
+
       const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: req.user.email,
+        to: correos,
         subject: 'Nuevo Producto Añadido!',
         text: `${restaurante.nombre} ha añadido un nuevo producto: ${nuevoProducto.nombre}`
       };
