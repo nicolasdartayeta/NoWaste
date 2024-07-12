@@ -11,7 +11,7 @@ div(class='flex flex-col p-4 w-full items-center justify-center')
 
     p(class='text-2xl font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Productos
     if productos.length 
-        div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")      
+        div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4")      
             each producto in productos
                 if producto.stock > 0
                     div(class='filterable-item') 
