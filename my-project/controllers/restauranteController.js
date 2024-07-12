@@ -1,10 +1,10 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
-const productoModel = require('../models/producto')
+const usuarioModel = require('../models/usuario')
+const {productoModel, tiposProductos} = require('../models/producto')
 const { unlink } = require('node:fs/promises')
 const nodemailer = require('nodemailer');
 const multer = require('multer')
-
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -61,14 +61,14 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
 // ACTUALIZADO
 exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
   let template
-  const parametros = {title: 'pene'} //??????????????????
-
+  const parametros = {}
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddRestaurante'
   } else {
     template = 'restaurantes/restaurantesHome'
     parametros.action = 'add'
   }
+  
   parametros.baseURL = baseURL
 
   res.render(template, parametros)
@@ -119,9 +119,8 @@ exports.restaurante_detail = asyncHandler(async (req, res, nect) => {
 exports.add_product = asyncHandler(async (req, res, next) => {
   const restauranteId = req.params.restauranteId
   const restaurante = await restauranteModel.findById(restauranteId).lean()
-
   let template
-  const parametros = { baseURL,restauranteId, datos: restaurante }
+  const parametros = { baseURL,restauranteId, datos: restaurante, tiposProductos}
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddProduct'
@@ -147,18 +146,23 @@ exports.add_product_post = asyncHandler(async (req, res, next) => {
         precio: req.body.precio,
         fecha_caducidad: req.body.fecha_caducidad,
         stock: req.body.stock,
+        tipoProducto: req.body.tipoProducto,
         imagenesProducto: req.files.map(file => ({ id: file.filename })),
         restauranteID: restaurante._id
       });
 
       await nuevoProducto.save()
 
-      //Envia mensaje por mail, (Nodemailer)  
+      //Envia mensaje por mail, (Nodemailer)
+
+      const usuarios = await usuarioModel.find().select('email').exec();
+      const correos = usuarios.map(usuario => usuario.email);
+
       const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: req.user.email,
+        from: `"NoWaste" <${process.env.EMAIL_USER}>`,
+        to: correos,
         subject: 'Nuevo Producto Añadido!',
-        text: `${restaurante.nombre} ha añadido un nuevo producto: ${nuevoProducto.nombre}`
+        text: `${restaurante.nombre} ha añadido: ${nuevoProducto.nombre} a $${nuevoProducto.precio}`
       };
 
       transporter.sendMail(mailOptions, (error, info) => {

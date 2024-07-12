@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const restauranteModel = require('../models/restaurante')
-const productoModel = require('../models/producto')
+const {productoModel, tiposProductos} = require('../models/producto')
 const http = require('http')
 const multer = require('multer')
 const sidebarHelper = require('../helpers/sidebar.js')
@@ -54,6 +54,7 @@ exports.home = asyncHandler(async (req, res, next) => {
               descripcion: 1,
               precio: 1,
               stock: 1,
+              tipoProducto: 1,
               imagenesProducto: 1,
               restauranteId: '$restaurante._id',
               restauranteNombre: '$restaurante.nombre'
@@ -65,7 +66,7 @@ exports.home = asyncHandler(async (req, res, next) => {
     } else {
       template = 'usuarios/usuariosHome'
     }
-    res.render(template, { sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: req.session.city})
+    res.render(template, { tiposProductos, sidebar: await sidebarHelper.sidebarRestaurantes(baseURL), baseURL, title: 'Lista de restaurantes', productos: productosConNombreRestaurante, ciudad: req.session.city})
   }else{
     res.appendHeader('HX-Redirect', '/user/mapa')
     res.render('usuarios/mapa')
@@ -101,14 +102,42 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
 })
 
 exports.listado_productos = asyncHandler(async (req, res, next) => { //CREO QUE NO SE USA, NI LA RUTA
-  const restaurantes = await restauranteModel.find().exec()
+  const productosConNombreRestaurante = await productoModel.aggregate([ //seria un join en mongoDB
+    {
+        $lookup: {
+            from: 'restaurantes', // Nombre de la colección con la que se quiere hacer el join
+            localField: 'restauranteID', //atributo de la colección de productos que se utiliza para el join
+            foreignField: '_id', //atributo de la colección de restaurantes que se utiliza para el join
+            as: 'restaurante' //nombre del campo en el resultado del join
+        }
+    },
+    {
+        $unwind: '$restaurante' // Deshacer el array resultante del lookup
+    },
+    {
+        $project: { // seleccionar los campos que se quieren mostrar
+            _id: 1,
+            nombre: 1,
+            descripcion: 1,
+            precio: 1,
+            stock: 1,
+            tipoProducto: 1,
+            imagenesProducto: 1,
+            restauranteId: '$restaurante._id',
+            restauranteNombre: '$restaurante.nombre'
+        }
+    }]);
+
   let template
+
   if (req.headers['hx-request']) {
     template = 'usuarios/htmxListProductos'
   } else {
-    template = 'usuarios/usuariosHome'// ERROR
+    // template = 'usuarios/usuariosHome'// ERROR
+    res.redirect('/user')
   }
-  res.render(template, { baseURL, restaurantesList: restaurantes, ciudad: req.session.city })
+  res.render(template, { tiposProductos, productos: productosConNombreRestaurante})
+  // res.render(template, { baseURL, restaurantesList: restaurantes, ciudad: req.session.city })
 })
 
 exports.comprar_producto = asyncHandler(async (req, res, next) => {

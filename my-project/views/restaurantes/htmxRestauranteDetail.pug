@@ -18,8 +18,9 @@ div(id=datos._id)
                     else if baseURL == '/admin/restaurantes'
                         +productCard(producto, false,datos.nombre)
         else 
-            p Este restaurante no tiene productos
+            p(class='text-center text-lg font-bold text-gray-800 mt-6') Este restaurante no tiene productos
     else 
-        p No hay datos
+        p(class='text-center text-lg font-bold text-gray-800 mt-6') No hay datos
     if baseURL == '/admin/restaurantes'
-        button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content" class='w-60 inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white') Agregar Producto
+        div(class='flex justify-center mt-6')
+            button(hx-get="/admin/restaurantes/"+datos._id+"/addProduct" hx-target="#content" class='w-60 inline-block shrink-0 rounded-md border border-customGreen bg-customGreen px-4 py-3 text-center font-medium text-white transition hover:bg-transparent hover:text-customGreen') Agregar Producto

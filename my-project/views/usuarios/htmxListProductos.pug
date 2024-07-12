@@ -1,11 +1,21 @@
+include ../scripts/filter.pug
 include ../componentes/productCard.pug
-div(class='flex flex-col items-center justify-center p-4 w-full')
+
+div(class='flex flex-col p-4 w-full items-center justify-center')
+    form(class='max-w-sm text-center')
+        label(for='tipoProducto' class='block mb-2 text-sm font-medium text-gray-900') Tipo de producto
+        select(onchange=`filterItems(this.value)` class='rounded-md border border-customGreen bg-customGreen px-4 py-3 text-center font-medium text-white transition hover:bg-transparent hover:text-customGreen block w-full p-2.5')
+            option(selected='all' value='all') Todos 
+            each tipo in tiposProductos
+                option(value=tipo) #{tipo}
+
     p(class='text-2xl font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Productos
     if productos.length 
         div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")      
             each producto in productos
                 if producto.stock > 0
-                    +productCard(producto,true,producto.restauranteNombre)
+                    div(class='filterable-item') 
+                        +productCard(producto,true,producto.restauranteNombre)
                 else 
                     script.
                         async function deleteProduct(restauranteId, productoId) {

@@ -26,6 +26,9 @@ const productoSchema = new Schema({
     },
 })
 
+const tiposProductos = ["Hamburguesa", "Tarta", "Milanesa", "Helado", "Pizza", "Sandwich", "Sopa", "Torta", "Pan", "Frutas", "Verduras", "Otros"]
+
   
   // Export function to create "Producto" model class
-  module.exports = mongoose.model("producto", productoSchema);
+  module.exports.productoModel = mongoose.model("producto", productoSchema);
+  module.exports.tiposProductos = tiposProductos;

@@ -21,6 +21,7 @@ mixin productCard(producto, mostrarBotones,restauranteNombre)
                 div(class="text-right")
                     p(class="text-xl font-bold text-gray-800") $#{producto.precio}
                     p(class="text-sm text-gray-600") Stock: #{producto.stock}
+                    p(class='tipoProducto hidden') Tipo: #{producto.tipoProducto}
             if mostrarBotones
                 form(action=`/user/compra/${producto._id}`, method="POST" class="mt-3 flex items-center justify-between")
                     div(class="flex items-center")
