@@ -1,0 +1,35 @@
+mixin productCard(producto, mostrarBotones,restauranteNombre)
+    div(class="relative m-4 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg")
+        section(class="container")
+            if producto.imagenesProducto && producto.imagenesProducto.length > 0
+                div.slider-wrapper
+                    - let counter = 0
+                    div.slider-nav
+                        each imagen in producto.imagenesProducto
+                            a(href=`#img_${imagen.id}${counter++}`)
+                    - counter = 0
+                    div.slider
+                        each imagen in producto.imagenesProducto
+                            img(id=`img_${imagen.id}${counter++}` src=`/static/images/${imagen.id}` onerror="this.remove()")
+            else
+                p(class="text-center text-gray-500") No hay imágenes disponibles
+        div(class="px-5 pb-3")
+            div(class="flex justify-between mb-1")
+                div(class="text-left")
+                    p(class="text-xl font-semibold text-gray-800") Local: #{restauranteNombre}
+                    p(class="text-2xl font-bold text-gray-900") #{producto.nombre}
+                div(class="text-right")
+                    p(class="text-xl font-bold text-gray-800") $#{producto.precio}
+                    p(class="text-sm text-gray-600") Stock: #{producto.stock}
+            if mostrarBotones
+                form(action=`/user/compra/${producto._id}`, method="POST" class="mt-3 flex items-center justify-between")
+                    div(class="flex items-center")
+                        label(for=`cantidad-${producto._id}` class="block text-sm font-medium text-gray-700 mr-3") Cantidad:
+                        input(type="number", id=`cantidad-${producto._id}`, name="cantidad", min="1", max=producto.stock, value="1", class="block w-20 px-3 py-1 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm mr-3")
+                    button(onclick=`log(${producto.stock})` type="submit" class="bg-green-900 text-gray-100 px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 ml-auto") Comprar
+            else
+                div(class="flex justify-between mt-3")
+                    button(hx-get=baseURL+'/'+producto.restauranteID+"/edit/"+producto._id hx-target="#content")
+                        img(src="/static/icons/edit.png" alt="edit" class="w-6 h-6")
+                    button(hx-delete=baseURL+'/'+producto.restauranteID+"/deleteProduct/"+producto._id hx-target="closest div.relative" hx-swap='outerHTML' )
+                        img(src="/static/icons/trash.png" alt="delete" class="w-6 h-6")

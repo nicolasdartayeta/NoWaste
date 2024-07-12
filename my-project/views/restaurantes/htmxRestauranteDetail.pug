@@ -1,42 +1,24 @@
+include ../componentes/productCard.pug
 div(id=datos._id)
     // URl DE USER
     if baseURL == '/user'
         button(class='absolute bottom-5 right-5 rounded-md border border-customGreen bg-customGreen px-4 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-customGreen' hx-get=baseURL+"/listadoProductos"  hx-target="#content") volver
     
-    p(class='text-2xl font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent')= datos.nombre
-
     if datos.length != 0
-        ul(class='space-y-2')
-            each dato, atributo in datos
-                if (atributo != 'nombre' && atributo != 'imagen' && atributo != '_id' && atributo != '__v')
-                    li #{atributo}: #{dato}
-            if (productos.length != 0)
-                p(class='text-lg font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Productos
-                ul.listaProductos
-                    each producto in productos
-                        li.producto
-                            each valor, atributo in producto
-                                if (atributo != 'imagenesProducto' && atributo != '_id' && atributo != 'restauranteID' && atributo != '__v')
-                                    p #{atributo}: #{valor}
-                                        if baseURL == '/admin/restaurantes'
-                                            if (atributo == 'nombre')
-                                                button(hx-get=baseURL+'/'+datos._id+"/edit/"+producto._id hx-target="#content")
-                                                    img(src="/static/icons/edit.png" alt="edit")
-                                                button(hx-delete=baseURL+'/'+datos._id+"/deleteProduct/"+producto._id hx-target="closest li" hx-swap='outerHTML') 
-                                                    img(src="/static/icons/trash.png" alt="delete")
-                                else if (atributo == 'imagenesProducto')  
-                                    section(class="container")
-                                        div.slider-wrapper
-                                            - let counter = 0
-                                            div.slider-nav
-                                                each imagen in valor
-                                                    a(href = '#img_'+ imagen.id +(counter++))
-                                            - counter = 0
-                                            div.slider
-                                                each imagen in valor
-                                                    img(id='img_'+ imagen.id+(counter++) src='/static/images/'+imagen.id onerror="this.remove()")
-            else 
-                p Este restaurante no tiene productos
+        p(class='text-3xl font-bold leading-9 text-center tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent mb-6')= datos.nombre
+        ul(class='space-y-2 text-center')
+            li(class='text-lg font-bold text-gray-800')
+                | Direccion: #{datos.calle} #{datos.numero}, #{datos.ciudad}
+        if (productos.length != 0)
+            p(class='text-lg font-bold leading-9 tracking-tight bg-gradient-to-t from-lime-700 to-green-900 bg-clip-text text-transparent') Productos
+            ul.listaProductos
+                each producto in productos
+                    if baseURL == '/user'
+                        +productCard(producto, true,datos.nombre)
+                    else if baseURL == '/admin/restaurantes'
+                        +productCard(producto, false,datos.nombre)
+        else 
+            p Este restaurante no tiene productos
     else 
         p No hay datos
     if baseURL == '/admin/restaurantes'
