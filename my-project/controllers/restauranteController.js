@@ -61,7 +61,6 @@ exports.restaurante_list = asyncHandler(async (req, res, next) => {
 // ACTUALIZADO
 exports.restaurante_create_get = asyncHandler(async (req, res, next) => {
   let template
-  const parametros = {title: 'pene'} //??????????????????
 
   if (req.headers['hx-request']) {
     template = 'restaurantes/htmxAddRestaurante'
